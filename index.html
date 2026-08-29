@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TeoHome 🎬</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+        :root { --bg: #0f0f0f; --card: #1a1a1a; --accent: #ffd100; --text: #ffffff; --muted: #999; }
+        body { background-color: var(--bg); color: var(--text); line-height: 1.6; }
+
+        /* Header & Nav */
+        header { background: #000; padding: 1rem 5%; position: sticky; top: 0; z-index: 100; border-bottom: 1px solid #2a2a2a; }
+        .nav-container { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; }
+        .logo { font-size: 1.8rem; font-weight: bold; color: var(--accent); text-decoration: none; }
+        nav a { color: var(--text); text-decoration: none; margin: 0 0.8rem; font-weight: 500; transition: color 0.3s; }
+        nav a:hover { color: var(--accent); }
+
+        /* Search Bar */
+        .search-box { flex: 1; max-width: 450px; margin: 0.8rem; }
+        .search-input { width: 100%; padding: 0.75rem 1.2rem; border: none; border-radius: 30px; background: var(--card); color: var(--text); font-size: 1rem; border: 1px solid #333; }
+        .search-input:focus { outline: none; border-color: var(--accent); }
+
+        /* Hero Section */
+        .hero { padding: 3rem 5%; text-align: center; background: linear-gradient(rgba(0,0,0,0.7), rgba(15,15,15,1)); }
+        .hero h1 { font-size: 2.5rem; margin-bottom: 1rem; }
+        .hero h1 span { color: var(--accent); }
+        .hero p { font-size: 1.2rem; color: var(--muted); max-width: 700px; margin: 0 auto; }
+
+        /* Section Title */
+        .section-title { padding: 2rem 5% 0.5rem; font-size: 1.5rem; border-left: 4px solid var(--accent); margin-left: 3%; }
+
+        /* Content Grid */
+        .grid { padding: 1rem 5% 4rem; display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 1.8rem; }
+        .card { background: var(--card); border-radius: 10px; overflow: hidden; transition: transform 0.3s, box-shadow 0.3s; cursor: pointer; border: 1px solid #2a2a2a; }
+        .card:hover { transform: translateY(-6px); box-shadow: 0 0 20px rgba(255, 209, 0, 0.25); border-color: var(--accent); }
+        .card-thumb { height: 220px; background: #2a2a2a; display: flex; align-items: center; justify-content: center; font-size: 3rem; color: var(--accent); }
+        .card-info { padding: 0.8rem; }
+        .card-title { font-weight: 600; margin-bottom: 0.3rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .card-meta { font-size: 0.85rem; color: var(--muted); display: flex; justify-content: space-between; }
+        .rating { color: var(--accent); font-weight: bold; }
+
+        /* Footer */
+        footer { background: #000; text-align: center; padding: 2rem; color: var(--muted); border-top: 1px solid #2a2a2a; margin-top: 2rem; }
+
+        /* Responsive Tweaks */
+        @media (max-width: 768px) {
+            .nav-container { flex-direction: column; gap: 0.8rem; }
+            .hero h1 { font-size: 1.8rem; }
+            .grid { grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 1.2rem; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- HEADER & NAVIGATION -->
+<header>
+    <div class="nav-container">
+        <a href="#" class="logo">🎬 TeoHome</a>
+        <nav>
+            <a href="#">Home</a>
+            <a href="#">Trending</a>
+            <a href="#">Anime</a>
+            <a href="#">Movies</a>
+            <a href="#">Series</a>
+            <a href="#">About</a>
+        </nav>
+        <div class="search-box">
+            <input type="text" class="search-input" placeholder="🔍 Search anything...">
+        </div>
+    </div>
+</header>
+
+<!-- HERO BANNER -->
+<section class="hero">
+    <h1>Welcome to <span>TeoHome</span> 🎉</h1>
+    <p>Your personal entertainment hub — clean, fast, beautiful, and built just for you! Explore, discover, and enjoy! ✨</p>
+</section>
+
+<!-- TRENDING SECTION -->
+<h2 class="section-title">🔥 Trending Now</h2>
+<section class="grid">
+    <div class="card">
+        <div class="card-thumb">🎬</div>
+        <div class="card-info">
+            <div class="card-title">Coming Soon</div>
+            <div class="card-meta"><span>2026</span><span class="rating">⭐ 9.0</span></div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-thumb">🎌</div>
+        <div class="card-info">
+            <div class="card-title">Anime Picks</div>
+            <div class="card-meta"><span>Collection</span><span class="rating">⭐ 9.5</span></div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-thumb">🎥</div>
+        <div class="card-info">
+            <div class="card-title">Movies List</div>
+            <div class="card-meta"><span>Updated</span><span class="rating">⭐ 8.8</span></div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-thumb">📺</div>
+        <div class="card-info">
+            <div class="card-title">Series Hub</div>
+            <div class="card-meta"><span>New Added</span><span class="rating">⭐ 9.2</span></div>
+        </div>
+    </div>
+    <!-- Copy the card block above to add MORE anytime! -->
+</section>
+
+<!-- FOOTER -->
+<footer>
+    <p>© 2026 TeoHome — All rights reserved 💛✨</p>
+    <p style="font-size: 0.9rem; margin-top: 0.5rem;">Built with love, just for you 🥰</p>
+</footer>
+
+</body>
+</html>
