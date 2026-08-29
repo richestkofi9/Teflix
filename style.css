@@ -179,25 +179,31 @@ html {
   font-size: 16px;
   flex-shrink: 0;
 }
-
 @media (max-width: 600px) {
   .navbar {
-    padding: 15px 12px;
+    padding: 12px 15px;
+    flex-wrap: wrap;
+    gap: 12px;
   }
 
   .navbar h2 {
-    font-size: 20px;
-  }
-
-  .nav-links {
-    gap: 10px;
-  }
-
-  .nav-links a {
-    font-size: 13px;
+    font-size: 22px;
   }
 
   #theme-toggle {
-    padding: 5px 8px;
+    margin-left: auto;
+    padding: 6px 10px;
   }
+
+  .nav-links {
+    order: 3;
+    width: 100%;
+    justify-content: center;
+    gap: 18px;
+  }
+
+  .nav-links a {
+    font-size: 14px;
+  }
+}
 }
