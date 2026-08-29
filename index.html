@@ -176,34 +176,35 @@
     </div>
 
     <h2 class="section-title">🔤 Quick A–Z Navigation</h2>
-    <div class="az-nav">
-        <button class="az-btn">#</button>
-        <button class="az-btn">A</button>
-        <button class="az-btn">B</button>
-        <button class="az-btn">C</button>
-        <button class="az-btn">D</button>
-        <button class="az-btn">E</button>
-        <button class="az-btn">F</button>
-        <button class="az-btn">G</button>
-        <button class="az-btn">H</button>
-        <button class="az-btn">I</button>
-        <button class="az-btn">J</button>
-        <button class="az-btn">K</button>
-        <button class="az-btn">L</button>
-        <button class="az-btn">M</button>
-        <button class="az-btn">N</button>
-        <button class="az-btn">O</button>
-        <button class="az-btn">P</button>
-        <button class="az-btn">Q</button>
-        <button class="az-btn">R</button>
-        <button class="az-btn">S</button>
-        <button class="az-btn">T</button>
-        <button class="az-btn">U</button>
-        <button class="az-btn">V</button>
-        <button class="az-btn">W</button>
-        <button class="az-btn">X</button>
-        <button class="az-btn">Y</button>
-        <button class="az-btn">Z</button>
+<div class="az-nav">
+    <button class="az-btn" onclick="filterLetter('all')">#</button>
+    <button class="az-btn" onclick="filterLetter('A')">A</button>
+    <button class="az-btn" onclick="filterLetter('B')">B</button>
+    <button class="az-btn" onclick="filterLetter('C')">C</button>
+    <button class="az-btn" onclick="filterLetter('D')">D</button>
+    <button class="az-btn" onclick="filterLetter('E')">E</button>
+    <button class="az-btn" onclick="filterLetter('F')">F</button>
+    <button class="az-btn" onclick="filterLetter('G')">G</button>
+    <button class="az-btn" onclick="filterLetter('H')">H</button>
+    <button class="az-btn" onclick="filterLetter('I')">I</button>
+    <button class="az-btn" onclick="filterLetter('J')">J</button>
+    <button class="az-btn" onclick="filterLetter('K')">K</button>
+    <button class="az-btn" onclick="filterLetter('L')">L</button>
+    <button class="az-btn" onclick="filterLetter('M')">M</button>
+    <button class="az-btn" onclick="filterLetter('N')">N</button>
+    <button class="az-btn" onclick="filterLetter('O')">O</button>
+    <button class="az-btn" onclick="filterLetter('P')">P</button>
+    <button class="az-btn" onclick="filterLetter('Q')">Q</button>
+    <button class="az-btn" onclick="filterLetter('R')">R</button>
+    <button class="az-btn" onclick="filterLetter('S')">S</button>
+    <button class="az-btn" onclick="filterLetter('T')">T</button>
+    <button class="az-btn" onclick="filterLetter('U')">U</button>
+    <button class="az-btn" onclick="filterLetter('V')">V</button>
+    <button class="az-btn" onclick="filterLetter('W')">W</button>
+    <button class="az-btn" onclick="filterLetter('X')">X</button>
+    <button class="az-btn" onclick="filterLetter('Y')">Y</button>
+    <button class="az-btn" onclick="filterLetter('Z')">Z</button>
+</div>
     </div>
 </div>
 
@@ -317,6 +318,23 @@ function searchTitles() {
         } else {
             card.style.display = 'none';
         }
+        function filterLetter(letter) {
+    const cards = document.querySelectorAll('.card');
+    const searchInput = document.querySelector('.search-input');
+
+    searchInput.value = '';
+
+    cards.forEach(card => {
+        const title = card.querySelector('.card-name').textContent.trim();
+
+        if (letter === 'all') {
+            card.style.display = '';
+        } else {
+            card.style.display =
+                title.toUpperCase().startsWith(letter) ? '' : 'none';
+        }
+    });
+}
     });
 }
 </script>
