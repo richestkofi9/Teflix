@@ -30,7 +30,19 @@
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 1.5rem; margin-bottom: 1rem; }
         .card { background: var(--card); border-radius: 8px; overflow: hidden; cursor: pointer; transition: all 0.25s ease; border: 1px solid #2a2a2a; }
         .card:hover { background: var(--hover); transform: translateY(-4px); border-color: var(--accent); }
-        .card-thumb { height: 220px; background: linear-gradient(135deg, #2a2a2a, #1f1f1f); display: flex; align-items: center; justify-content: center; position: relative; }
+.card-thumb {
+    height: 220px;
+    background: #111;
+    overflow: hidden;
+    position: relative;
+}
+
+.card-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
         .icon-main { font-size: 4rem; color: var(--accent); }
         .card-info { padding: 0.8rem; }
         .card-name { font-weight: 600; font-size: 0.9rem; margin-bottom: 0.2rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
