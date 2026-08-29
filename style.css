@@ -157,3 +157,47 @@ html {
   font-size: 18px;
   cursor: pointer;
 }
+.navbar {
+  padding: 15px 20px;
+  gap: 15px;
+}
+
+.navbar h2 {
+  margin: 0;
+}
+
+.nav-links {
+  gap: 12px;
+}
+
+.nav-links a {
+  font-size: 14px;
+}
+
+#theme-toggle {
+  padding: 6px 10px;
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+@media (max-width: 600px) {
+  .navbar {
+    padding: 15px 12px;
+  }
+
+  .navbar h2 {
+    font-size: 20px;
+  }
+
+  .nav-links {
+    gap: 10px;
+  }
+
+  .nav-links a {
+    font-size: 13px;
+  }
+
+  #theme-toggle {
+    padding: 5px 8px;
+  }
+}
