@@ -96,7 +96,15 @@
 <div class="section-wrap">
     <h2 class="section-title" id="newest">🔥 Newest Drops</h2>
     <div class="grid">
-        <div class="card" onclick="showItem('arifureta','⚔️')"><div class="card-thumb"><span class="icon-main">⚔️</span></div><div class="card-info"><div class="card-name">Arifureta</div><div class="card-meta">S3 • EP 1–16</div></div></div>
+       <div class="card" onclick="showItem('arifureta','⚔️')">
+    <div class="card-thumb">
+        <img src="https://cdn.myanimelist.net/images/anime/1300/135331.jpg" alt="Arifureta">
+    </div>
+    <div class="card-info">
+        <div class="card-name">Arifureta</div>
+        <div class="card-meta">S3 • EP 1–16</div>
+    </div>
+</div>
         <div class="card" onclick="showItem('fma','⚙️')"><div class="card-thumb"><span class="icon-main">⚙️</span></div><div class="card-info"><div class="card-name">Fullmetal Alchemist</div><div class="card-meta">S1 • EP 19–39</div></div></div>
         <div class="card" onclick="showItem('exiledknight','🛡️')"><div class="card-thumb"><span class="icon-main">🛡️</span></div><div class="card-info"><div class="card-name">Exiled Heavy Knight</div><div class="card-meta">S1 • EP 1–5</div></div></div>
         <div class="card" onclick="showItem('10yearstand','🏰')"><div class="card-thumb"><span class="icon-main">🏰</span></div><div class="card-info"><div class="card-name">10 Year-Long Stand</div><div class="card-meta">S1 • EP 3–5</div></div></div>
@@ -347,65 +355,12 @@ function filterLetter(letter) {
         } else {
             card.style.display =
                 title.toUpperCase().startsWith(letter) ? '' : 'none';
-        }
 
     });
-}
-const posterTitles = {
-    "Arifureta": "Arifureta",
-    "Fullmetal Alchemist": "Fullmetal Alchemist: Brotherhood",
-    "Your Name.": "Your Name",
-    "Weathering With You": "Weathering with You",
-    "Suzume": "Suzume",
-    "Jujutsu Kaisen 0": "Jujutsu Kaisen 0",
-    "Haikyuu!! Dumpster Battle": "Haikyuu!! The Dumpster Battle",
-    "Demon Slayer: Infinity Castle": "Demon Slayer: Kimetsu no Yaiba",
-    "Chainsaw Man: Reze Arc": "Chainsaw Man",
-    "Dragon Ball Z: Battle of Gods": "Dragon Ball Z",
-    "Dragon Ball Super: Super Hero": "Dragon Ball Super",
-    "Kuroko's Basketball": "Kuroko no Basket",
-    "Bleach: TYBW": "Bleach",
-    "Re:Zero": "Re:ZERO -Starting Life in Another World-"
-};
 
-async function loadPosters() {
-    const cards = document.querySelectorAll('.card');
-
-    for (const card of cards) {
-        const nameElement = card.querySelector('.card-name');
-        const thumb = card.querySelector('.card-thumb');
-
-        if (!nameElement || !thumb) continue;
-
-        const name = nameElement.textContent.trim();
-        const searchName = posterTitles[name] || name;
-
-        try {
-            const response = await fetch(
-                `https://api.jikan.moe/v4/anime?q=${encodeURIComponent(searchName)}&limit=1`
-            );
-
-            if (!response.ok) continue;
-
-            const result = await response.json();
-            const anime = result.data?.[0];
-
-            if (!anime?.images?.jpg?.large_image_url) continue;
-
-            const img = document.createElement('img');
-            img.src = anime.images.jpg.large_image_url;
-            img.alt = name;
-            img.loading = 'lazy';
-
-            thumb.innerHTML = '';
-            thumb.appendChild(img);
-        } catch (error) {
-            console.log('Poster could not load:', name);
-        }
     }
 }
 
-loadPosters();
 </script>
 
 </body>
