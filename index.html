@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TeoHome 🎬</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+        :root { --bg: #0f0f0f; --card: #1a1a1a; --accent: #ffd100; --text: #ffffff; --muted: #999; }
+        body { background-color: var(--bg); color: var(--text); line-height: 1.6; }
+
+        header { background: #000; padding: 1rem 5%; position: sticky; top: 0; z-index: 100; border-bottom: 1px solid #2a2a2a; }
+        .nav-container { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.8rem; }
+        .logo { font-size: 1.8rem; font-weight: bold; color: var(--accent); text-decoration: none; cursor: pointer; }
+        nav a { color: var(--text); text-decoration: none; margin: 0 0.7rem; font-weight: 500; transition: color 0.3s; cursor: pointer; }
+        nav a:hover { color: var(--accent); }
+
+        .search-box { flex: 1; max-width: 450px; width: 100%; }
+        .search-input { width: 100%; padding: 0.75rem 1.2rem; border: none; border-radius: 30px; background: var(--card); color: var(--text); font-size: 1rem; border: 1px solid #333; }
+        .search-input:focus { outline: none; border-color: var(--accent); }
+
+        .hero { padding: 4rem 5%; text-align: center; background: linear-gradient(rgba(0,0,0,0.8), rgba(15,15,15,1)); }
+        .hero h1 { font-size: 2.5rem; margin-bottom: 1rem; }
+        .hero h1 span { color: var(--accent); }
+        .hero p { font-size: 1.2rem; color: var(--muted); max-width: 700px; margin: 0 auto; }
+
+        .section-title { padding: 2.5rem 5% 0.8rem; font-size: 1.5rem; border-left: 4px solid var(--accent); margin-left: 3%; }
+
+        .grid { padding: 1rem 5% 4rem; display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 1.8rem; }
+        .card { background: var(--card); border-radius: 12px; overflow: hidden; transition: transform 0.3s, box-shadow 0.3s; cursor: pointer; border: 1px solid #2a2a2a; }
+        .card:hover { transform: translateY(-6px); box-shadow: 0 0 22px rgba(255, 209, 0, 0.3); border-color: var(--accent); }
+        .card-thumb { height: 220px; background: linear-gradient(135deg, #2a2a2a, #1f1f1f); display: flex; align-items: center; justify-content: center; font-size: 3.5rem; color: var(--accent); }
+        .card-info { padding: 0.9rem; }
+        .card-title { font-weight: 600; margin-bottom: 0.4rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 0.95rem; }
+        .card-meta { font-size: 0.8rem; color: var(--muted); display: flex; justify-content: space-between; align-items: center; }
+        .rating { color: var(--accent); font-weight: bold; }
+
+        #detailOverlay { position: fixed; inset: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.97); z-index: 9999; display: none; overflow-y: auto; padding: 2rem 5%; }
+        .detail-container { max-width: 700px; margin: 0 auto; background: var(--card); border-radius: 16px; padding: 2rem; border: 1px solid #2a2a2a; }
+        .back-btn { background: var(--accent); color: #000; border: none; padding: 0.7rem 1.5rem; border-radius: 8px; font-weight: bold; cursor: pointer; margin-bottom: 1.5rem; transition: 0.2s; }
+        .back-btn:hover { background: #fff; }
+        .detail-thumb { font-size: 5rem; text-align: center; padding: 1rem; color: var(--accent); }
+        .detail-title { font-size: 2rem; color: var(--accent); margin-bottom: 0.5rem; }
+        .detail-meta { color: var(--muted); margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 1px solid #2a2a2a; }
+        .detail-desc { font-size: 1.05rem; line-height: 1.8; color: #eee; }
+
+        footer { background: #000; text-align: center; padding: 2.5rem; color: var(--muted); border-top: 1px solid #2a2a2a; margin-top: 2rem; }
+
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 1.8rem; }
+            .grid { grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 1.2rem; }
+            .detail-title { font-size: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="nav-container">
+        <span class="logo" onclick="goHome()">🎬 TeoHome</span>
+        <nav>
+            <a onclick="goHome()">Home</a>
+            <a href="#trending">Trending</a>
+            <a href="#anime">Anime</a>
+            <a href="#movies">Movies</a>
+            <a href="#series">Series</a>
+            <a href="#about">About</a>
+        </nav>
+        <div class="search-box">
+            <input type="text" class="search-input" placeholder="🔍 Search anything...">
+        </div>
+    </div>
+</header>
+
+<section class="hero" id="home">
+    <h1>Welcome to <span>TeoHome</span> 🎉</h1>
+    <p>✅ NOW FULLY WORKING — Tap ANY card to read its full story! 📖✨</p>
+</section>
+
+<h2 class="section-title" id="trending">🔥 Trending Now — TAP ANY CARD!</h2>
+<section class="grid">
+    <div class="card" onclick="showAnime('bleach')">
+        <div class="card-thumb">⚔️</div>
+        <div class="card-info"><div class="card-title">Bleach: TYBW</div><div class="card-meta"><span>Final Arc</span><span class="rating">⭐ 9.7</span></div></div>
+    </div>
+    <div class="card" onclick="showAnime('blackclover')">
+        <div class="card-thumb">⚡</div>
+        <div class="card-info"><div class="card-title">Black Clover</div><div class="card-meta"><span>Ongoing</span><span class="rating">⭐ 9.2</span></div></div>
+    </div>
+    <div class="card" onclick="showAnime('berserk')">
+        <div class="card-thumb">🗡️</div>
+        <div class="card-info"><div class="card-title">Berserk</div><div class="card-meta"><span>Legendary</span><span class="rating">⭐ 9.5</span></div></div>
+    </div>
+    <div class="card" onclick="showAnime('sentenced')">
+        <div class="card-thumb">⚖️</div>
+        <div class="card-info"><div class="card-title">Sentenced to Be a Hero</div><div class="card-meta"><span>New</span><span class="rating">⭐ 9.0</span></div></div>
+    </div>
+    <div class="card" onclick="showAnime('demonslayer')">
+        <div class="card-thumb">🔥</div>
+        <div class="card-info"><div class="card-title">Demon Slayer</div><div class="card-meta"><span>All Seasons</span><span class="rating">⭐ 9.4</span></div></div>
+    </div>
+</section>
+
+<h2 class="section-title" id="anime">🎌 Full Anime Collection — TAP ANY!</h2>
+<section class="grid">
+    <div class="card" onclick="showAnime('onepiece')"><div class="card-thumb">🏴‍☠️</div><div class="card-info"><div class="card-title">One Piece</div><div class="card-meta"><span>Ongoing</span><span class="rating">⭐ 9.5</span></div></div></div>
+    <div class="card" onclick="showAnime('naruto')"><div class="card-thumb">🍥</div><div class="card-info"><div class="card-title">Naruto</div><div class="card-meta"><span>Classic</span><span class="rating">⭐ 9.0</span></div></div></div>
+    <div class="card" onclick="showAnime('aot')"><div class="card-thumb">🏰</div><div class="card-info"><div class="card-title">Attack on Titan</div><div class="card-meta"><span>Final</span><span class="rating">⭐ 9.6</span></div></div></div>
+    <div class="card" onclick="showAnime('sololeveling')"><div class="card-thumb">👑</div><div class="card-info"><div class="card-title">Solo Leveling</div><div class="card-meta"><span>Seasons 1-2</span><span class="rating">⭐ 9.4</span></div></div></div>
+    <div class="card" onclick="showAnime('deathnote')"><div class="card-thumb">📓</div><div class="card-info"><div class="card-title">Death Note</div><div class="card-meta"><span>Thriller</span><span class="rating">⭐ 9.6</span></div></div></div>
+    <div class="card" onclick="showAnime('fma')"><div class="card-thumb">🛡️</div><div class="card-info"><div class="card-title">Fullmetal Alchemist</div><div class="card-meta"><span>Brotherhood</span><span class="rating">⭐ 9.7</span></div></div></div>
+    <div class="card" onclick="showAnime('jujutsu')"><div class="card-thumb">🐉</div><div class="card-info"><div class="card-title">Jujutsu Kaisen</div><div class="card-meta"><span>Seasons 1-2</span><span class="rating">⭐ 9.4</span></div></div></div>
+    <div class="card" onclick="showAnime('hxh')"><div class="card-thumb">🎣</div><div class="card-info"><div class="card-title">Hunter x Hunter</div><div class="card-meta"><span>Complete</span><span class="rating">⭐ 9.5</span></div></div></div>
+    <div class="card" onclick="showAnime('default')"><div class="card-thumb">✨</div><div class="card-info"><div class="card-title">More Anime Coming Soon</div><div class="card-meta"><span>Updated Often</span><span class="rating">⭐ --</span></div></div></div>
+</section>
+
+<h2 class="section-title" id="movies">🎬 Top Movies</h2>
+<section class="grid">
+    <div class="card"><div class="card-thumb">🎥</div><div class="card-info"><div class="card-title">Action Collection</div><div class="card-meta"><span>Best Rated</span><span class="rating">⭐ 9.0</span></div></div></div>
+</section>
+
+<h2 class="section-title" id="series">📺 Popular Series</h2>
+<section class="grid">
+    <div class="card"><div class="card-thumb">📡</div><div class="card-info"><div class="card-title">Trending Series</div><div class="card-meta"><span>New Added</span><span class="rating">⭐ 9.0</span></div></div></div>
+</section>
+
+<h2 class="section-title" id="about">ℹ️ About TeoHome</h2>
+<section style="padding: 1rem 5% 4rem; max-width: 800px;">
+    <div style="background: var(--card); padding: 2rem; border-radius: 12px; border: 1px solid #2a2a2a;">
+        <h3 style="color: var(--accent); margin-bottom: 1rem;">Hi, I'm Teo! 👋💛</h3>
+        <p style="margin-bottom: 1rem; color: #ddd;">Welcome to TeoHome — tap ANY anime card to read its full story, details & more! 📖🎌</p>
+        <p style="color: #ddd;">Built from scratch with love, right here in Ghana 🇬🇭 — just for you! ✨</p>
+    </div>
+</section>
+
+<!-- 📖 DETAIL PAGE POPUP -->
+<div id="detailOverlay">
+    <div class="detail-container">
+        <button class="back-btn" onclick="closeAnime()">← Back to All Anime</button>
+        <div class="detail-thumb" id="bigIcon">⚔️</div>
+        <h2 class="detail-title" id="bigTitle">Anime Title</h2>
+        <div class="detail-meta" id="bigMeta">Rating • Episodes • Status</div>
+        <div class="detail-desc" id="bigStory">Full story goes here...</div>
+    </div>
+</div>
+
+<footer>
+    <p>© 2026 TeoHome — Tap any card to read! 💛✨</p>
+    <p style="font-size: 0.9rem; margin-top: 0.5rem;">Built with love, just for you 🥰 | Made in Ghana 🇬🇭</p>
+</footer>
+
+<!-- ⚙️ THE MAGIC SCRIPT — FULLY FIXED! -->
+<script>
+// 📚 ALL ANIME INFO DATABASE
+const animeData = {
+    bleach: {
+        icon: "⚔️",
+        title: "Bleach: Thousand Year Blood War",
+        meta: "⭐ 9.7 • Final Arc • 52 Episodes • Completed",
+        story: "Ichigo Kurosaki’s greatest battle begins! The Quincy King Yhwach returns to destroy the Soul Society forever. Secrets hidden for 1,000 years finally come to light — the truth of his heritage, the origin of Zanpakuto, and the ultimate fate of the Soul King. The epic conclusion to one of the greatest stories ever told! 🧡⚔️"
+    },
+    blackclover: {
+        icon: "⚡",
+        title: "Black Clover",
+        meta: "⭐ 9.2 • Ongoing • 170+ Episodes • Magic & Action",
+        story: "In a world where magic means everything, Asta is born with absolutely ZERO magic power! But he refuses to give up — with his anti-magic swords, unshakable grit, and the bonds of the Black Bulls, he’s climbing straight to become the Wizard King! ⚔️🔥"
+    },
+    berserk: {
+        icon: "🗡️",
+        title: "Berserk",
+        meta: "⭐ 9.5 • Legendary • Dark Fantasy • Epic Story",
+        story: "Guts — the Black Swordsman — carries a blade too heavy for any ordinary human. Betrayed by the person he trusted most, marked with a brand that draws demons to him, he walks a bloody path of vengeance against fate itself. A dark, powerful masterpiece! 🖤🗡️"
+    },
+    sentenced: {
+        icon: "⚖️",
+        title: "Sentenced to Be a Hero",
+        meta: "⭐ 9.0 • New Series • Action Fantasy • Ongoing",
+        story: "The hero who once saved the world is suddenly declared guilty and thrown into the dangerous Hero’s Dungeon — a place meant to kill even the strongest! Now he must fight every floor just to survive and uncover the terrible truth behind his conviction! ⚖️⚔️"
+    },
+    demonslayer: {
+        icon: "🔥",
+        title: "Demon Slayer: Kimetsu no Yaiba",
+        meta: "⭐ 9.4 • All Seasons • 55+ Episodes • Action Masterpiece",
+        story: "When demons slaughter his family and turn his little sister Nezuko into one of them, Tanjirou joins the Demon Slayer Corps. He masters incredible breathing styles, meets loyal friends, and fights to turn his sister human again — and end every demon! Stunning animation, heart-pounding battles! 🗡️🔥"
+    },
+    onepiece: {
+        icon: "🏴‍☠️",
+        title: "One Piece",
+        meta: "⭐ 9.5 • Ongoing • 1100+ Episodes • Greatest Adventure",
+        story: "Monkey D. Luffy sets out from a tiny village to find the legendary One Piece treasure and become King of the Pirates! Along the way he gathers his Straw Hat crew — each with their own dream — and faces the strongest foes in the world! 🏴‍☠️❤️"
+    },
+    naruto: {
+        icon: "🍥",
+        title: "Naruto / Shippuden",
+        meta: "⭐ 9.3 • Complete • 720 Episodes • Ninja Legend",
+        story: "An outcast boy hated by his village carries the Nine-Tailed Fox inside him. All he wants is respect, friendship, and to become Hokage — the greatest leader of them all. From troublemaker to hero, this is his journey! 🦊🍥"
+    },
+    aot: {
+        icon: "🏰",
+        title: "Attack on Titan",
+        meta: "⭐ 9.6 • Final Season • 87 Episodes • Dark Epic",
+        story: "Humanity hides behind massive walls from man-eating giants — until the walls crumble. Eren Jaeger swears he’ll wipe every Titan from existence… but the truth behind the world is far darker and more complicated than anyone imagined! 🏰⚔️"
+    },
+    sololeveling: {
+        icon: "👑",
+        title: "Solo Leveling",
+        meta: "⭐ 9.4 • Seasons 1-2 • 20+ Episodes • Action Powerhouse",
+        story: "Sung Jinwoo was the weakest hunter alive — until a deadly accident gave him a secret ability only he can see! He can level up endlessly, grow stronger in silence, and rise from the bottom to become humanity’s strongest weapon! 🗡️👑🔥"
+    },
+    deathnote: {
+        icon: "📓",
+        title: "Death Note",
+        meta: "⭐ 9.6 • Complete • 37 Episodes • Psychological Thriller",
+        story: "A notebook falls from the sky — write a name in it while picturing their face, and they die! Brilliant student Light Yagami finds it and tries to build a perfect new world… but genius detective L is coming to stop him. A battle of wits! 📓🧠"
+    },
+    fma: {
+        icon: "🛡️",
+        title: "Fullmetal Alchemist: Brotherhood",
+        meta: "⭐ 9.7 • Complete • 64 Episodes • Perfect Story",
+        story: "Two brothers break alchemy’s ultimate taboo trying to bring their mother back — and pay a terrible price. Now they travel the world seeking the legendary Philosopher’s Stone to fix what they lost, uncovering a massive conspiracy that threatens their whole country! 🛡️⚗️"
+    },
+    jujutsu: {
+        icon: "🐉",
+        title: "Jujutsu Kaisen",
+        meta: "⭐ 9.4 • Seasons 1-2 • 47 Episodes • Dark Action",
+        story: "Yuji swallows a cursed object and becomes host to an ancient evil curse! He joins Jujutsu High to learn how to fight curses alongside Megumi and Nobara, under the strongest sorcerer alive — Gojo Satoru! 🐉👁️"
+    },
+    hxh: {
+        icon: "🎣",
+        title: "Hunter x Hunter",
+        meta: "⭐ 9.5 • Complete • 148 Episodes • Epic Journey",
+        story: "Gon leaves home to become a Hunter — and find the father who left him behind! He makes friends, grows stronger, faces deadly challenges, and enters a world full of secrets, magic, and danger! 🎣💚"
+    },
+    default: {
+        icon: "✨",
+        title: "More Amazing Anime Coming Soon!",
+        meta: "⭐ -- • Stay Tuned • Updated Regularly",
+        story: "I’m adding new titles, full summaries, and details all the time! Keep checking back — more of your favorite anime are on their way to TeoHome! 💛🎌✨"
+    }
+};
+
+// 🎯 OPEN THE STORY PAGE WHEN TAPPED
+function showAnime(id) {
+    const data = animeData[id];
+    if (!data) return;
+    document.getElementById("bigIcon").textContent = data.icon;
+    document.getElementById("bigTitle").textContent = data.title;
+    document.getElementById("bigMeta").innerHTML = data.meta;
+    document.getElementById("bigStory").innerHTML = data.story;
+    document.getElementById("detailOverlay").style.display = "block";
+    window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+// ↩️ CLOSE & GO BACK
+function closeAnime() {
+    document.getElementById("detailOverlay").style.display = "none";
+}
+
+// 🏠 GO BACK TO TOP / HOME
+function goHome() {
+    closeAnime();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+}
+</script>
+
+</body>
+</html>
