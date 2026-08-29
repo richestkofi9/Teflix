@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TeoHome 🎬</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+        :root { --bg: #0f0f0f; --card: #1a1a1a; --accent: #ffd100; --text: #ffffff; --muted: #999; }
+        body { background-color: var(--bg); color: var(--text); line-height: 1.6; }
+
+        header { background: #000; padding: 1rem 5%; position: sticky; top: 0; z-index: 100; border-bottom: 1px solid #2a2a2a; }
+        .nav-container { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.8rem; }
+        .logo { font-size: 1.8rem; font-weight: bold; color: var(--accent); cursor: pointer; }
+        nav a { color: var(--text); text-decoration: none; margin: 0 0.7rem; font-weight: 500; transition: color 0.3s; cursor: pointer; }
+        nav a:hover { color: var(--accent); }
+
+        .search-box { flex: 1; max-width: 450px; width: 100%; }
+        .search-input { width: 100%; padding: 0.75rem 1.2rem; border: none; border-radius: 30px; background: var(--card); color: var(--text); font-size: 1rem; border: 1px solid #333; }
+        .search-input:focus { outline: none; border-color: var(--accent); }
+
+        .hero { padding: 4rem 5%; text-align: center; background: linear-gradient(rgba(0,0,0,0.8), rgba(15,15,15,1)); }
+        .hero h1 { font-size: 2.5rem; margin-bottom: 1rem; }
+        .hero h1 span { color: var(--accent); }
+        .hero p { font-size: 1.2rem; color: var(--muted); max-width: 700px; margin: 0 auto; }
+
+        .section-title { padding: 2.5rem 5% 0.8rem; font-size: 1.5rem; border-left: 4px solid var(--accent); margin-left: 3%; }
+
+        .grid { padding: 1rem 5% 4rem; display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 1.8rem; }
+        .card { background: var(--card); border-radius: 12px; overflow: hidden; transition: transform 0.3s, box-shadow 0.3s; cursor: pointer; border: 1px solid #2a2a2a; }
+        .card:hover { transform: translateY(-6px); box-shadow: 0 0 22px rgba(255, 209, 0, 0.3); border-color: var(--accent); }
+        .card-thumb { height: 220px; background: var(--card); display: flex; align-items: center; justify-content: center; overflow: hidden; }
+        .card-thumb img { width: 100%; height: 100%; object-fit: cover; }
+        .card-info { padding: 0.9rem; }
+        .card-title { font-weight: 600; margin-bottom: 0.4rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 0.95rem; }
+        .card-meta { font-size: 0.8rem; color: var(--muted); display: flex; justify-content: space-between; align-items: center; }
+        .rating { color: var(--accent); font-weight: bold; }
+
+        #detailOverlay { position: fixed; inset: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.97); z-index: 9999; display: none; overflow-y: auto; padding: 2rem 5%; }
+        .detail-container { max-width: 700px; margin: 0 auto; background: var(--card); border-radius: 16px; padding: 2rem; border: 1px solid #2a2a2a; }
+        .back-btn { background: var(--accent); color: #000; border: none; padding: 0.7rem 1.5rem; border-radius: 8px; font-weight: bold; cursor: pointer; margin-bottom: 1.5rem; transition: 0.2s; }
+        .back-btn:hover { background: #fff; }
+        .detail-thumb { width: 100%; height: 250px; display: flex; align-items: center; justify-content: center; overflow: hidden; border-radius: 12px; margin-bottom: 1.5rem; background: #111; }
+        .detail-thumb img { width: 100%; height: 100%; object-fit: cover; }
+        .detail-title { font-size: 2rem; color: var(--accent); margin-bottom: 0.5rem; }
+        .detail-meta { color: var(--muted); margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 1px solid #2a2a2a; }
+        .detail-desc { font-size: 1.05rem; line-height: 1.8; color: #eee; }
+
+        footer { background: #000; text-align: center; padding: 2.5rem; color: var(--muted); border-top: 1px solid #2a2a2a; margin-top: 2rem; }
+
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 1.8rem; }
+            .grid { grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 1.2rem; }
+            .detail-title { font-size: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="nav-container">
+        <span class="logo" onclick="goHome()">🎬 TeoHome</span>
+        <nav>
+            <a onclick="goHome()">Home</a>
+            <a href="#trending">Trending</a>
+            <a href="#anime">Anime</a>
+            <a href="#movies">Movies</a>
+            <a href="#series">Series</a>
+            <a href="#about">About</a>
+        </nav>
+        <div class="search-box">
+            <input type="text" class="search-input" placeholder="🔍 Search anything...">
+        </div>
+    </div>
+</header>
+
+<section class="hero" id="home">
+    <h1>Welcome to <span>TeoHome</span> 🎉</h1>
+    <p>✅ Now with real anime posters! Tap any card to read the full story! 🖼️📖✨</p>
+</section>
+
+<h2 class="section-title" id="trending">🔥 Trending — TAP ANY!</h2>
+<section class="grid">
+    <div class="card" onclick="showItem('bleach')">
+        <div class="card-thumb"><img src="https://anilist.co/img/cover/124194.jpg" alt="Bleach: TYBW"></div>
+        <div class="card-info"><div class="card-title">Bleach: TYBW</div><div class="card-meta"><span>Final Arc</span><span class="rating">⭐ 9.7</span></div></div>
+    </div>
+    <div class="card" onclick="showItem('blackclover')">
+        <div class="card-thumb"><img src="https://anilist.co/img/cover/97941.jpg" alt="Black Clover"></div>
+        <div class="card-info"><div class="card-title">Black Clover</div><div class="card-meta"><span>Ongoing</span><span class="rating">⭐ 9.2</span></div></div>
+    </div>
+    <div class="card" onclick="showItem('berserk')">
+        <div class="card-thumb"><img src="https://anilist.co/img/cover/101146.jpg" alt="Berserk"></div>
+        <div class="card-info"><div class="card-title">Berserk</div><div class="card-meta"><span>Legendary</span><span class="rating">⭐ 9.5</span></div></div>
+    </div>
+    <div class="card" onclick="showItem('sentenced')">
+        <div class="card-thumb"><img src="https://anilist.co/img/cover/166050.jpg" alt="Sentenced to Be a Hero"></div>
+        <div class="card-info"><div class="card-title">Sentenced to Be a Hero</div><div class="card-meta"><span>New</span><span class="rating">⭐ 9.0</span></div></div>
+    </div>
+    <div class="card" onclick="showItem('demonslayer')">
+        <div class="card-thumb"><img src="https://anilist.co/img/cover/101922.jpg" alt="Demon Slayer"></div>
+        <div class="card-info"><div class="card-title">Demon Slayer</div><div class="card-meta"><span>All Seasons</span><span class="rating">⭐ 9.4</span></div></div>
+    </div>
+</section>
+
+<h2 class="section-title" id="anime">🎌 Anime — TAP ANY!</h2>
+<section class="grid">
+    <div class="card" onclick="showItem('onepiece')">
+        <div class="card-thumb"><img src="https://anilist.co/img/cover/21.jpg" alt="One Piece"></div>
+        <div class="card-info"><div class="card-title">One Piece</div><div class="card-meta"><span>Ongoing</span><span class="rating">⭐ 9.5</span></div></div>
+    </div>
+    <div class="card" onclick="showItem('naruto')">
+        <div class="card-thumb"><img src="https://anilist.co/img/cover/1735.jpg" alt="Naruto"></div>
+        <div class="card-info"><div class="card-title">Naruto</div><div class="card-meta"><span>Classic</span><span class="rating">⭐ 9.0</span></div></div>
+    </div>
+    <div class="card" onclick="showItem('aot')">
+        <div class="card-thumb"><img src="https://anilist.co/img/cover/164267.jpg" alt="Attack on Titan"></div>
+        <div class="card-info"><div class="card-title">Attack on Titan</div><div class="card-meta"><span>Final</span><span class="rating">⭐ 9.6</span></div></div>
+    </div>
+    <div class="card" onclick="showItem('sololeveling')">
+        <div class="card-thumb"><img src="https://anilist.co/img/cover/136906.jpg" alt="Solo Leveling"></div>
+        <div class="card-info"><div class="card-title">Solo Leveling</div><div class="card-meta"><span>Seasons 1-2</span><span class="rating">⭐ 9.4</span></div></div>
+    </div>
+    <div class="card" onclick="showItem('deathnote')">
+        <div class="card-thumb"><img src="https://anilist.co/img/cover/1535.jpg" alt="Death Note"></div>
+        <div class="card-info"><div class="card-title">Death Note</div><div class="card-meta"><span>Thriller</span><span class="rating">⭐ 9.6</span></div></div>
+    </div>
+</section>
+
+<h2 class="section-title" id="movies">🎬 Movies — 10 TOTAL — TAP ANY!</h2>
+<section class="grid">
+    <div class="card" onclick="showItem('movie1')">
+        <div class="card-thumb"><img src="https://anilist.co/img/cover/101923.jpg" alt="Demon Slayer: Mugen Train"></div>
+        <div class="card-info"><div class="card-title">Demon Slayer: Mugen Train</div><div class="card-meta"><span>Anime Hit</span><span class="rating">⭐ 9.6</span></div></div>
+    </div>
+    <div class="card" onclick="showItem('movie2')">
+        <div class="card-thumb"><img src="https://anilist.co/img/cover/21519.jpg" alt="Your Name"></div>
+        <div class="card-info"><div class="card-title">Your Name</div><div class="card-meta"><span>Romance/Fantasy</span><span class="rating">⭐ 9.5</span></div></div>
+    </div>
+    <div class="card" onclick="showItem('movie3')">
+        <div class="card-thumb"><img src="https://anilist.co/img/cover/20954.jpg" alt="A Silent Voice"></div>
+        <div class="card-info"><div class="card-title">A Silent Voice</div><div class="card-meta"><span>Drama</span><span class="rating">⭐ 9.4</span></div></div>
+    </div>
+    <div class="card" onclick="showItem('movie4')">
+        <div class="card-thumb"><img src="https://anilist.co/img/cover/149300.jpg" alt="Black Clover: Sword of Wizard King"></div>
+        <div class="card-info"><div class="card-title">Black Clover: Sword of Wizard King</div><div class="card-meta"><span>Action</span><span class="rating">⭐ 9.1</span></div></div>
+    </div>
+    <div class="card" onclick="showItem('movie5')">
+        <div class="card-thumb"><img src="https://anilist.co/img/cover/141651.jpg" alt="Invincible: Atom Eve"></div>
+        <div class="card-info"><div class="card-title">Invincible: Atom Eve</div><div class="card-meta"><span>Superhero</span><span class="rating">⭐ 9.2</span></div></div>
+    </div>
+    <div class="card" onclick="showItem('movie6')">
+        <div class="card-thumb"><img src="https://upload.wikimedia.org/wikipedia/en/7/73/Interstellar_poster.jpg" alt="Interstellar"></div>
+        <div class="card-info"><div class="card-title">Interstellar</div><div class="card-meta"><span>Sci-Fi Epic</span><span class="rating">⭐ 9.4</span></div></div>
+    </div>
+    <div class="card" onclick="showItem('movie7')">
+        <div class="card-thumb"><img src="https://upload.wikimedia.org/wikipedia/en/9/9d/Lord_of_the_Rings_Return_of_the_King.jpg" alt="The Lord of the Rings"></div>
+        <div class="card-info"><div class="card-title">The Lord of the Rings</div><div class="card-meta"><span>Fantasy Classic</span><span class="rating">⭐ 9.7</span></div></div>
+    </div>
+    <div class="card" onclick="showItem('movie8')">
+        <div class="card-thumb"><img src="https://upload.wikimedia.org/wikipedia/en/1/14/Avatar_The_Way_of_Water_poster.jpg" alt="Avatar: The Way of Water"></div>
+        <div class="card-info"><div class="card-title">Avatar: The Way of Water</div><div class="card-meta"><span>Adventure</span><span class="rating">⭐ 8.9</span></div></div>
+    </div>
+    <div class="card" onclick="showItem('movie9')">
+        <div class="card-thumb"><img src="https://upload.wikimedia.org/wikipedia/en/8/8f/Spider-Man_Across_the_Spider-Verse_poster.jpg" alt="Spider-Man: Across the Spider-Verse"></div>
+        <div class="card-info"><div class="card-title">Spider-Man: Across the Spider-Verse</div><div class="card-meta"><span>Animation</span><span class="rating">⭐ 9.3</span></div></div>
+    </div>
+    <div class="card" onclick="showItem('movie10')">
+        <div class="card-thumb"><img src="https://upload.wikimedia.org/wikipedia/en/8/80/Real_Madrid_CF_logo.svg" alt="Real Madrid: The Kings of Europe"></div>
+        <div class="card-info"><div class="card-title">Real Madrid: The Kings of Europe</div><div class="card-meta"><span>Sports/Documentary</span><span class="rating">⭐ 9.5</span></div></div>
+    </div>
+</section>
+
+<h2 class="section-title" id="series">📺 Series — 10 TOTAL — TAP ANY!</h2>
+<section class="grid">
+    <div class="card" onclick="showItem('series1')">
+        <div class="card-thumb"><img src="https://anilist.co/img/cover/101924.jpg" alt="Invincible"></div>
+        <div class="card-info"><div class="card-title">Invincible</div><div class="card-meta"><span>Seasons 1-3</span><span class="rating">⭐ 9.3</span></div></div>
+    </div>
+    <div class="card" onclick="showItem('series2')">
+        <div class="card-thumb"><img src="https://upload.wikimedia.org/wikipedia/en/0/0f/The_Walking_Dead_Season_1_poster.jpg" alt="The Walking Dead"></div>
+        <div class="card-info"><div class="card-title">The Walking Dead</div><div class="card-meta"><span>11 Seasons</span><span class="rating">⭐ 8.9</span></div></div>
+    </div>
+    <div class="card" onclick="showItem('series3')">
+        <div class="card-thumb"><img src="https://upload.wikimedia.org/wikipedia/en/d/d8/Game_of_Thrones_title_card.jpg" alt="Game of Thrones"></div>
+        <div class="card-info"><div class="card-title">Game of Thrones</div><div class="card-meta"><span>8 Seasons</span><span class="rating">⭐ 9.4</span></div></div>
+    </div>
+    <div class="card" onclick="showItem('series4')">
+        <div class="card-thumb"><img src="https://anilist.co/img/cover/131681.jpg" alt="Spy x Family"></div>
+        <div class="card-info"><div class="card-title">Spy x Family</div><div class="card-meta"><span>Seasons 1-2</span><span class="rating">⭐ 9.3</span></div></div>
+    </div>
+    <div class="card" onclick="showItem('series5')">
+        <div class="card-thumb"><img src="https://upload.wikimedia.org/wikipedia/en/6/6d/Stranger_Things_logo.jpg" alt="Stranger Things"></div>
+        <div class="card-info"><div class="card-title">Stranger Things</div><div class="card-meta"><span>5 Seasons</span><span class="rating">⭐ 9.1</span></div></div>
+    </div>
+    <div class="card" onclick="showItem('series6')">
+        <div class="card-thumb"><img src="https://upload.wikimedia.org/wikipedia/en/7/7e/House_of_the_Dragon_title.jpg" alt="House of the Dragon"></div>
+        <div class="card-info"><div class="card-title">House of the Dragon</div><div class="card-meta"><span>Seasons 1-2</span><span class="rating">⭐ 9.0</span></div></div>
+    </div>
+    <div class="card" onclick="showItem('series7')">
+        <div class="card-thumb"><img src="https://upload.wikimedia.org/wikipedia/en/9/9f/One_Piece_2023_TV_series_logo.png" alt="One Piece Live Action"></div>
+        <div class="card-info"><div class="card-title">One Piece (Live Action)</div><div class="card-meta"><span>Season 1</span><span class="rating">⭐ 8.5</span></div></div>
+    </div>
+    <div class="card" onclick="showItem('series8')">
+        <div class="card-thumb"><img src="https://anilist.co/img/cover/101925.jpg" alt="Death Note Live Action"></div>
+        <div class="card-info"><div class="card-title">Death Note (Live Action)</div><div class="card-meta"><span>Series</span><span class="rating">⭐ 8.7</span></div></div>
+    </div>
+    <div class="card" onclick="showItem('series9')">
+        <div class="card-thumb"><img src="https://upload.wikimedia.org/wikipedia/en/8/80/Real_Madrid_CF_logo.svg" alt="All or Nothing: Real Madrid"></div>
+        <div class="card-info"><div class="card-title">All or Nothing: Real Madrid</div><div class="card-meta"><span>Sports Series</span><span class="rating">⭐ 9.2</span></div></div>
+    </div>
+    <div class="card" onclick="showItem('series10')">
+        <div class="card-thumb"><img src="https://anilist.co/img/cover/101926.jpg" alt="Castlevania"></div>
+        <div class="card-info"><div class="card-title">Castlevania</div><div class="card-meta"><span>4 Seasons</span><span class="rating">⭐ 9.0</span></div></div>
+    </div>
+</section>
+
+<h2 class="section-title" id="about">ℹ️ About TeoHome</h2>
+<section style="padding: 1rem 5% 4rem; max-width: 800px;">
+    <div style="background: var(--card); padding: 2rem; border-radius: 12px; border: 1px solid #2a2a2a;">
+        <h3 style="color: var(--accent); margin-bottom: 1rem;">Hi, I'm Teo! 👋💛</h3>
+        <p style="margin-bottom: 1rem; color: #ddd;">Tap ANY card — Anime, Movies, Series — EVERYTHING opens its own story page! 🖼️📖✨ Built with love in Ghana 🇬🇭 just for you!</p>
+    </div>
+</section>
+
+<div id="detailOverlay">
+    <div class="detail-container">
+        <button class="back-btn" onclick="closeItem()">← Back to All</button>
+        <div class="detail-thumb" id="bigImage"><img src="https://anilist.co/img/cover/124194.jpg" alt="Poster"></div>
+        <h2 class="detail-title" id="bigTitle">Title Here</h2>
+        <div class="detail-meta" id="bigMeta">Info • Rating • Details</div>
+        <div class="detail-desc" id="bigStory">Description appears here...</div>
+    </div>
+</div>
+
+<footer>
+    <p>© 2026 TeoHome — Real posters added! 💛✨</p>
+    <p style="font-size: 0.9rem; margin-top: 0.5rem;">Built with love, just for you 🥰 | Made in Ghana 🇬🇭</p>
+</footer>
+
+<script>
+const library = {
+    bleach: {
+        image: "https://anilist.co/img/cover/124194.jpg",
+        title: "Bleach: Thousand Year Blood War",
+        meta: "⭐ 9.7 • Final Arc • 52 Episodes",
+        story: "Ichigo faces the Quincy King in the ultimate battle for the Soul Society! Secrets revealed, destinies fulfilled — the legendary conclusion! 🧡⚔️"
+    },
+    blackclover: {
+        image: "https://anilist.co/img/cover/97941.jpg",
+        title: "Black Clover",
+        meta: "⭐ 9.2 • Ongoing • Magic Adventure",
+        story: "Born with zero magic but the strongest will! Asta fights his way to Wizard King with the Black Bulls! ⚔️🔥"
+    },
+    berserk: {
+        image: "https://anilist.co/img/cover/101146.jpg",
+        title: "Berserk",
+        meta: "⭐ 9.5 • Dark Fantasy • Legendary",
+        story: "Guts the Black Swordsman walks a path of vengeance against fate itself! Brutal, deep, unforgettable! 🖤🗡️"
+    },
+    sentenced: {
+        image: "https://anilist.co/img/cover/166050.jpg",
+        title: "Sentenced to Be a Hero",
+        meta: "⭐ 9.0 • New • Action Fantasy",
+        story: "The hero is condemned and thrown into a deadly dungeon — now he fights every floor to survive and uncover the truth! ⚖️⚔️"
+    },
+    demonslayer: {
+        image: "https://anilist.co/img/cover/101922.jpg",
+        title: "Demon Slayer",
+        meta: "⭐ 9.4 • All Seasons • Action Masterpiece",
+        story: "Tanjirou becomes a Demon Slayer to save his sister Nezuko! Breath styles, stunning battles, pure heart! 🗡️🔥"
+    },
+    onepiece: {
+        image: "https://anilist.co/img/cover/21.jpg",
+        title: "One Piece",
+        meta: "⭐ 9.5 • Ongoing • Greatest Adventure",
+        story: "Luffy and the Straw Hats sail for the One Piece to become King of the Pirates! Friends, dreams, epic world! 🏴‍☠️❤️"
+    },
+    naruto: {
+        image: "https://anilist.co/img/cover/1735.jpg",
+        title: "Naruto",
+        meta: "⭐ 9.3 • Complete • Ninja Legend",
+        story: "From outcast to hero — Naruto’s journey to become Hokage! Bonds, pain, redemption! 🦊🍥"
+    },
+    aot: {
+        image: "https://anilist.co/img/cover/164267.jpg",
+        title: "Attack on Titan",
+        meta: "⭐ 9.6 • Final Season • Dark Epic",
+        story: "Humanity behind walls — until everything changes. The truth changes everything! 🏰⚔️"
+    },
+    sololeveling: {
+        image: "https://anilist.co/img/cover/136906.jpg",
+        title: "Solo Leveling",
+        meta: "⭐ 9.4 • Seasons 1-2 • Action Powerhouse",
+        story: "The weakest hunter levels up in secret — rising from E-Rank to absolute monarch! 🗡️👑🔥"
+    },
+    deathnote: {
+        image: "https://anilist.co/img/cover/1535.jpg",
+        title: "Death Note",
+        meta: "⭐ 9.6 • Thriller • Mind Games",
+        story: "Write a name — and they die. A battle of wits between geniuses! 📓🧠"
+    },
+    movie1: {
+        image: "https://anilist.co/img/cover/101923.jpg",
+        title: "Demon Slayer: Mugen Train",
+        meta: "⭐ 9.6 • Movie • 117 mins",
+        story: "Tanjirou, Zenitsu and Inosuke board the Mugen Train to save passengers from a powerful demon! Heartbreaking & spectacular! 🚂🔥"
+    },
+    movie2: {
+        image: "https://anilist.co/img/cover/21519.jpg",
+        title: "Your Name",
+        meta: "⭐ 9.5 • Movie • 106 mins",
+        story: "A boy in the city and a girl in the countryside swap bodies — then fate tries to tear them apart! Beautiful, emotional masterpiece! 🌠❤️"
+    },
+    movie3: {
+        image: "https://anilist.co/img/cover/20954.jpg",
+        title: "A Silent Voice",
+        meta: "⭐ 9.4 • Movie • 130 mins",
+        story: "A bully seeks redemption years after hurting a deaf girl — a touching story of friendship, forgiveness and second chances! 🎭💛"
+    },
+    movie4: {
+        image: "https://anilist.co/img/cover/149300.jpg",
+        title: "Black Clover: Sword of the Wizard King",
+        meta: "⭐ 9.1 • Movie • 113 mins",
+        story: "Asta and Yuno face an ancient threat targeting the Wizard King! Big action, big stakes! ⚔️⚡"
+    },
+    movie5: {
+        image: "https://anilist.co/img/cover/141651.jpg",
+        title: "Invincible: Atom Eve",
+        meta: "⭐ 9.2 • Special • 48 mins",
+        story: "The untold origin story of Atom Eve — her powers, her past, and what makes her special! 🦸💖"
+    },
+    movie6: {
+        image: "https://upload.wikimedia.org/wikipedia/en/7/73/Interstellar_poster.jpg",
+        title: "Interstellar",
+        meta: "⭐ 9.4 • Sci-Fi Epic • 169 mins",
+        story: "Astronauts travel through a wormhole to save humanity — love transcends time and space! Mind-blowing! 🚀⏳"
+    },
+    movie7: {
+        image: "https://upload.wikimedia.org/wikipedia/en/9/9d/Lord_of_the_Rings_Return_of_the_King.jpg",
+        title: "The Lord of the Rings: Return of the King",
+        meta: "⭐ 9.7 • Fantasy Epic • 201 mins",
+        story: "The final battle for Middle-earth — Frodo at Mount Doom, Aragorn leads the fight! One of the greatest films ever made! ⚔️👑"
+    },
+    movie8: {
+        image: "https://upload.wikimedia.org/wikipedia/en/1/14/Avatar_The_Way_of_Water_poster.jpg",
+        title: "Avatar: The Way of Water",
+        meta: "⭐ 8.9 • Adventure • 192 mins",
+        story: "The Sully family flees to the ocean clans — breathtaking world, stunning visuals, powerful family story! 🌊🐋"
+    },
+    movie9: {
+        image: "https://upload.wikimedia.org/wikipedia/en/8/8f/Spider-Man_Across_the_Spider-Verse_poster.jpg",
+        title: "Spider-Man: Across the Spider-Verse",
+        meta: "⭐ 9.3 • Animation • 140 mins",
+        story: "Miles Morales leaps across infinite dimensions — spectacular art style, non-stop action! 🕷️🎨"
+    },
+    movie10: {
+        image: "https://upload.wikimedia.org/wikipedia/en/8/80/Real_Madrid_CF_logo.svg",
+        title: "Real Madrid: The Kings of Europe",
+        meta: "⭐ 9.5 • Documentary • 90 mins",
+        story: "The legacy, the comebacks, the titles — why Real Madrid is the greatest club in football history! Hala Madrid! ⚽👑🏆"
+    },
+    series1: {
+        image: "https://anilist.co/img/cover/101924.jpg",
+        title: "Invincible",
+        meta: "⭐ 9.3 • 3 Seasons • Superhero/Action",
+        story: "Mark Grayson inherits incredible powers — and learns the dark truth about his father. Violent, shocking, amazing! 🦸💥"
+    },
+    series2: {
+        image: "https://upload.wikimedia.org/wikipedia/en/0/0f/The_Walking_Dead_Season_1_poster.jpg",
+        title: "The Walking Dead",
+        meta: "⭐ 8.9 • 11 Seasons • Post-Apocalyptic",
+        story: "Survivors band together in a world overrun by the dead — the real monsters are often the living! 🧟🛡️"
+    },
+    series3: {
+        image: "https://upload.wikimedia.org/wikipedia/en/d/d8/Game_of_Thrones_title_card.jpg",
+        title: "Game of Thrones",
+        meta: "⭐ 9.4 • 8 Seasons • Epic Fantasy",
+        story: "Noble families fight for the Iron Throne — dragons, magic, betrayal and war in Westeros! ⚔️🐉👑"
+    },
+    series4: {
+        image: "https://anilist.co/img/cover/131681.jpg",
+        title: "Spy x Family",
+        meta: "⭐ 9.3 • 2 Seasons • Action/Comedy",
+        story: "A spy, an assassin and a telepath girl pretend to be a family — chaos & heartwarming moments! 🕵️‍♂️💕"
+    },
+    series5: {
+        image: "https://upload.wikimedia.org/wikipedia/en/6/6d/Stranger_Things_logo.jpg",
+        title: "Stranger Things",
+        meta: "⭐ 9.1 • 5 Seasons • Sci-Fi/Horror",
+        story: "A boy vanishes — and a strange girl with powers appears. Secrets, monsters from another dimension, 80s vibes! 🔮🚲"
+    },
+    series6: {
+        image: "https://upload.wikimedia.org/wikipedia/en/7/7e/House_of_the_Dragon_title.jpg",
+        title: "House of the Dragon",
+        meta: "⭐ 9.0 • 2 Seasons • Fantasy/Drama",
+        story: "The Targaryen civil war — dragons, succession, family betrayal before the Game of Thrones! 🐉🔥"
+    },
+    series7: {
+        image: "https://upload.wikimedia.org/wikipedia/en/9/9f/One_Piece_2023_TV_series_logo.png",
+        title: "One Piece (Live Action)",
+        meta: "⭐ 8.5 • Season 1 • Adventure",
+        story: "Luffy gathers his first crew in the real-world take on the greatest pirate story ever! 🏴‍☠️🏝️"
+    },
+    series8: {
+        image: "https://anilist.co/img/cover/101925.jpg",
+        title: "Death Note (Live Action Series)",
+        meta: "⭐ 8.7 • 1 Season • Thriller",
+        story: "The deadly notebook battle comes to life — sharp, tense, psychological showdowns! 📓⚖️"
+    },
+    series9: {
+        image: "https://upload.wikimedia.org/wikipedia/en/8/80/Real_Madrid_CF_logo.svg",
+        title: "All or Nothing: Real Madrid",
+        meta: "⭐ 9.2 • Sports Series • Behind the Scenes",
+        story: "Go inside the greatest club in the world — locker rooms, big matches, champions! Hala Madrid! ⚽👑"
+    },
+    series10: {
+        image: "https://anilist.co/img/cover/101926.jpg",
+        title: "Castlevania",
+        meta: "⭐ 9.0 • 4 Seasons • Dark Fantasy",
+        story: "Vampire hunters fight Dracula’s army — inspired by games, great characters, bloody battles! 🧛⚔️"
+    }
+};
+
+function showItem(id) {
+    const d = library[id];
+    if (!d) return;
+
+    document.querySelector("#bigImage img").src = d.image;
+    document.querySelector("#bigImage img").alt = d.title;
+    document.getElementById("bigTitle").textContent = d.title;
+    document.getElementById("bigMeta").innerHTML = d.meta;
+    document.getElementById("bigStory").innerHTML = d.story;
+    document.getElementById("detailOverlay").style.display = "block";
+    window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function closeItem() {
+    document.getElementById("detailOverlay").style.display = "none";
+}
+
+function goHome() {
+    closeItem();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+}
+</script>
+
+</body>
+</html>
