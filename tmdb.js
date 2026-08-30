@@ -1,4 +1,4 @@
-const TMDB_TOKEN = "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI3OTgwNmM5NzY5MmM1MzFhNDQwMTRkYzkxYjQzZThmYiIsIm5iZiI6MTc4ODAzNzY4OS41NzYsInN1YiI6IjZhOTM0YTM5OTczODBmOGE4ZjdjNzUwNCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.wDTfaedUjIhorAxp-0kelJhwduRPsdoRK4orry4MXx4"
+const TMDB_TOKEN = "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI3OTgwNmM5NzY5MmM1MzFhNDQwMTRkYzkxYjQzZThmYiIsIm5iZiI6MTc4ODAzNzY4OS41NzYsInN1YiI6IjZhOTM0YTM5OTczODBmOGE4ZjdjNzUwNCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.wDTfaedUjIhorAxp-0kelJhwduRPsdoRK4orry4MXx4";
 const TMDB_IMAGE = "https://image.tmdb.org/t/p/w500";
 
 async function loadTMDBPosters() {
@@ -34,8 +34,10 @@ async function loadTMDBPosters() {
 
             if (!match) continue;
 
+            const posterUrl = TMDB_IMAGE + match.poster_path;
+
             const img = document.createElement("img");
-            img.src = TMDB_IMAGE + match.poster_path;
+            img.src = posterUrl;
             img.alt = title;
             img.loading = "lazy";
 
@@ -47,8 +49,7 @@ async function loadTMDBPosters() {
             thumb.innerHTML = "";
             thumb.appendChild(img);
 
-            // Save the poster URL on the card
-            card.dataset.tmdbPoster = img.src;
+            card.dataset.tmdbPoster = posterUrl;
 
         } catch (error) {
             console.log("TMDB poster failed:", title);
@@ -60,53 +61,34 @@ async function loadTMDBPosters() {
 
 function setupTMDBDetails() {
 
-    const originalShowItem = window.showItem;
+    document.querySelectorAll(".card").forEach(card => {
 
-    if (typeof originalShowItem !== "function") {
-        console.log("showItem function not found.");
-        return;
-    }
+        card.addEventListener("click", () => {
 
-    window.showItem = function(key, icon) {
+            setTimeout(() => {
 
-        // Run the original details function first
-        originalShowItem(key, icon);
+                const poster = card.dataset.tmdbPoster;
+                const bigIcon = document.getElementById("bigIcon");
 
-        // Find the card belonging to this anime
-        const cards = document.querySelectorAll(".card");
-
-        let poster = null;
-
-        cards.forEach(card => {
-            const onclick = card.getAttribute("onclick") || "";
-
-            if (onclick.includes(`'${key}'`)) {
-                poster = card.dataset.tmdbPoster;
-            }
-        });
-
-        // Replace the emoji with the TMDB poster
-        if (poster) {
-
-            const bigIcon = document.getElementById("bigIcon");
-
-            if (bigIcon) {
-                bigIcon.innerHTML = "";
+                if (!poster || !bigIcon) return;
 
                 const img = document.createElement("img");
 
                 img.src = poster;
-                img.alt = library[key]?.title || "";
+                img.alt = "";
                 img.style.width = "100%";
                 img.style.height = "100%";
                 img.style.objectFit = "cover";
-                img.style.borderRadius = "18px";
+                img.style.borderRadius = "8px";
                 img.style.display = "block";
 
-                bigIcon.appendChild(img);
-            }
-        }
-    };
+                bigIcon.replaceChildren(img);
+
+            }, 50);
+
+        });
+
+    });
 }
 
 loadTMDBPosters();
