@@ -1,4 +1,4 @@
-const TMDB_TOKEN = "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI3OTgwNmM5NzY5MmM1MzFhNDQwMTRkYzkxYjQzZThmYiIsIm5iZiI6MTc4ODAzNzY4OS41NzYsInN1YiI6IjZhOTM0YTM5OTczODBmOGE4ZjdjNzUwNCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.wDTfaedUjIhorAxp-0kelJhwduRPsdoRK4orry4MXx4";
+const TMDB_TOKEN =eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI3OTgwNmM5NzY5MmM1MzFhNDQwMTRkYzkxYjQzZThmYiIsIm5iZiI6MTc4ODAzNzY4OS41NzYsInN1YiI6IjZhOTM0YTM5OTczODBmOGE4ZjdjNzUwNCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.wDTfaedUjIhorAxp-0kelJhwduRPsdoRK4orry4MXx4";
 const TMDB_IMAGE = "https://image.tmdb.org/t/p/w500";
 
 async function loadTMDBPosters() {
@@ -41,14 +41,7 @@ async function loadTMDBPosters() {
             img.alt = title;
             img.loading = "lazy";
 
-            img.style.width = "100%";
-            img.style.height = "100%";
-            img.style.objectFit = "cover";
-            img.style.display = "block";
-
-            thumb.innerHTML = "";
-            thumb.appendChild(img);
-
+            thumb.replaceChildren(img);
             card.dataset.tmdbPoster = posterUrl;
 
         } catch (error) {
@@ -56,10 +49,10 @@ async function loadTMDBPosters() {
         }
     }
 
-    setupTMDBDetails();
+    setupDetailPosters();
 }
 
-function setupTMDBDetails() {
+function setupDetailPosters() {
 
     document.querySelectorAll(".card").forEach(card => {
 
@@ -68,23 +61,50 @@ function setupTMDBDetails() {
             setTimeout(() => {
 
                 const poster = card.dataset.tmdbPoster;
-                const bigIcon = document.getElementById("bigIcon");
+                const detailThumb = document.querySelector(".detail-thumb");
 
-                if (!poster || !bigIcon) return;
+                if (!detailThumb) return;
 
-                const img = document.createElement("img");
+                /* Make sure the Back button exists */
+                let backButton = document.querySelector(".back-btn");
 
-                img.src = poster;
-                img.alt = "";
-                img.style.width = "100%";
-                img.style.height = "100%";
-                img.style.objectFit = "cover";
-                img.style.borderRadius = "8px";
-                img.style.display = "block";
+                if (!backButton) {
+                    backButton = document.createElement("button");
+                    backButton.className = "back-btn";
+                    backButton.textContent = "← Back";
+                    backButton.onclick = function () {
+                        if (typeof closeItem === "function") {
+                            closeItem();
+                        }
+                    };
 
-                bigIcon.replaceChildren(img);
+                    const container = document.querySelector(".detail-container");
 
-            }, 50);
+                    if (container) {
+                        container.insertBefore(backButton, container.firstChild);
+                    }
+                }
+
+                /* Put poster inside the detail image area */
+                if (poster) {
+
+                    detailThumb.replaceChildren();
+
+                    const img = document.createElement("img");
+
+                    img.src = poster;
+                    img.alt = "";
+                    img.style.width = "auto";
+                    img.style.maxWidth = "100%";
+                    img.style.height = "230px";
+                    img.style.objectFit = "contain";
+                    img.style.display = "block";
+                    img.style.borderRadius = "8px";
+
+                    detailThumb.appendChild(img);
+                }
+
+            }, 100);
 
         });
 
