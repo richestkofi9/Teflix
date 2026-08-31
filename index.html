@@ -100,13 +100,20 @@
     border-radius: 8px;
 }
         .detail-icon { font-size: 5rem; color: var(--accent); }
-        .detail-title { font-size: 1.8rem; color: var(--accent); margin-bottom: 0.5rem; }
+        .detail-title {
+    font-size: 1.5rem;
+    color: var(--accent);
+    margin-bottom: 0.5rem;
+    line-height: 1.3;
         .detail-meta { color: var(--muted); margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px solid #2a2a2a; }
         .detail-desc { font-size: 1rem; line-height: 1.7; color: #eee; }
 
         footer { background: #000; text-align: center; padding: 2rem 5%; color: var(--muted); border-top: 1px solid #2a2a2a; margin-top: 2rem; }
 
         @media (max-width: 768px) {
+            .detail-title {
+    font-size: 1.4rem;
+}
             .grid { grid-template-columns: repeat(auto-fill, minmax(125px, 1fr)); gap: 1rem; }
             .card-thumb { height: 180px; }
         }
@@ -317,8 +324,13 @@ async function loadTMDBPosters() {
       );
       if (!match) continue;
 
-      // 💾 Save it for the detail page!
-      if (key) posterMap[key] = TMDB_IMAGE + match.poster_path;
+// 💾 Save poster and real description for the detail page
+if (key) {
+    posterMap[key] = TMDB_IMAGE + match.poster_path;
+
+    if (match.overview && library[key]) {
+        library[key].story = match.overview;
+    }
 
       const img = document.createElement("img");
       img.src = TMDB_IMAGE + match.poster_path;
