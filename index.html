@@ -344,7 +344,7 @@ if (key) {
     }
   }
 }
-
+const overviewMap = {};
 const library = {
   arifureta: {title:"Arifureta: From Commonplace to World's Strongest", meta:"Season 3 • Episodes 1–16", story:"Hajime Nagumo and his companions fight to survive and grow stronger in a dangerous world! ⚔️"},
   fullmetal: {title:"Fullmetal Alchemist: Brotherhood", meta:"Season 1 • Episodes 19–39", story:"The Elric brothers seek the Philosopher's Stone to restore their bodies! ⚙️"},
@@ -420,7 +420,7 @@ function showItem(key, icon) {
 
   document.getElementById('bigTitle').textContent = data.title;
   document.getElementById('bigMeta').textContent = data.meta;
-  document.getElementById('bigStory').textContent = data.story;
+  document.getElementById('bigStory').textContent = overviewMap[key] || data.story;
 
   const posterDiv = document.getElementById('bigIcon');
   if (posterMap[key]) {
