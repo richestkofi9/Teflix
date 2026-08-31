@@ -394,7 +394,10 @@ function showItem(key, icon) {
     posterDiv.textContent = icon;
   }
 
-  document.getElementById('detailOverlay').style.display = 'block';
+ openDetailsHistory();
+document.getElementById('detailOverlay').style.display = 'block';
+document.body.style.overflow = 'hidden';
+ document.getElementById('detailOverlay').style.display = 'block';
   document.body.style.overflow = 'hidden';
 }
 
@@ -406,11 +409,17 @@ function closeItem() {
   }
 
   document.body.style.overflow = '';
+
+  // Remove the detail-page history entry if we created one
+  if (window.location.hash === '#details') {
+    history.back();
+  }
 }
 
 function searchTitles() {
   const search = document.querySelector('.search-input').value.toLowerCase().trim();
   const cards = document.querySelectorAll('.card');
+
   cards.forEach(card => {
     const title = card.querySelector('.card-name').textContent.toLowerCase();
     card.style.display = title.includes(search) ? '' : 'none';
@@ -420,31 +429,36 @@ function searchTitles() {
 function filterLetter(letter) {
   const cards = document.querySelectorAll('.card');
   const searchInput = document.querySelector('.search-input');
+
   searchInput.value = '';
+
   cards.forEach(card => {
     const title = card.querySelector('.card-name').textContent.trim();
-    card.style.display = (letter === 'all' || title.toUpperCase().startsWith(letter)) ? '' : 'none';
+
+    card.style.display =
+      (letter === 'all' || title.toUpperCase().startsWith(letter))
+        ? ''
+        : 'none';
   });
 }
 
-// 🚀 Start everything!
-// 🔙 Make the browser/phone back button close the detail page
+// 🔙 Open detail page and create a browser history entry
+function openDetailsHistory() {
+  if (window.location.hash !== '#details') {
+    history.pushState({ details: true }, '', '#details');
+  }
+}
+
+// 🔙 Browser / phone back button
 window.addEventListener('popstate', function () {
-  closeItem();
-});
+  const overlay = document.getElementById('detailOverlay');
 
-// 🔙 Make the detail Back button extra reliable
-document.addEventListener('DOMContentLoaded', function () {
-  const backButton = document.querySelector('.back-btn');
-
-  if (backButton) {
-    backButton.addEventListener('click', function (event) {
-      event.preventDefault();
-      event.stopPropagation();
-      closeItem();
-    });
+  if (overlay && overlay.style.display === 'block') {
+    overlay.style.display = 'none';
+    document.body.style.overflow = '';
   }
 });
+
 loadTMDBPosters();
 </script>
 
