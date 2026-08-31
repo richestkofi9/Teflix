@@ -324,13 +324,10 @@ async function loadTMDBPosters() {
       );
       if (!match) continue;
 
-// 💾 Save poster and real description for the detail page
+// 💾 Save it for the detail page!
 if (key) {
     posterMap[key] = TMDB_IMAGE + match.poster_path;
-
-    if (match.overview && library[key]) {
-        library[key].story = match.overview;
-    }
+}
 
       const img = document.createElement("img");
       img.src = TMDB_IMAGE + match.poster_path;
