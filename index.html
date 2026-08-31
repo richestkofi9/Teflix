@@ -56,7 +56,25 @@
         .detail-container { max-width: 650px; margin: 0 auto; background: var(--card); border-radius: 12px; padding: 2rem; border: 1px solid #2a2a2a; }
         .back-btn { background: var(--accent); color: #000; border: none; padding: 0.6rem 1.3rem; border-radius: 6px; font-weight: bold; cursor: pointer; margin-bottom: 1.5rem; }
         .back-btn:hover { background: #fff; }
-        .detail-thumb { width: 100%; height: 250px; border-radius: 8px; background: linear-gradient(135deg, #2a2a2a, #1f1f1f); display: flex; align-items: center; justify-content: center; margin-bottom: 1.2rem; }
+        .detail-thumb {
+    width: 180px;
+    height: 260px;
+    margin: 0 auto 1.2rem;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #2a2a2a, #1f1f1f);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.detail-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    border-radius: 8px;
+}
         .detail-icon { font-size: 5rem; color: var(--accent); }
         .detail-title { font-size: 1.8rem; color: var(--accent); margin-bottom: 0.5rem; }
         .detail-meta { color: var(--muted); margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px solid #2a2a2a; }
@@ -371,7 +389,7 @@ function showItem(key, icon) {
 
   const posterDiv = document.getElementById('bigIcon');
   if (posterMap[key]) {
-    posterDiv.innerHTML = `<img src="${posterMap[key]}" alt="Poster" style="width:100%;height:100%;object-fit:cover;border-radius:8px;">`;
+    posterDiv.innerHTML = `<img src="${posterMap[key]}" alt="Poster">`;
   } else {
     posterDiv.textContent = icon;
   }
@@ -381,7 +399,12 @@ function showItem(key, icon) {
 }
 
 function closeItem() {
-  document.getElementById('detailOverlay').style.display = 'none';
+  const overlay = document.getElementById('detailOverlay');
+
+  if (overlay) {
+    overlay.style.display = 'none';
+  }
+
   document.body.style.overflow = '';
 }
 
@@ -405,6 +428,23 @@ function filterLetter(letter) {
 }
 
 // 🚀 Start everything!
+// 🔙 Make the browser/phone back button close the detail page
+window.addEventListener('popstate', function () {
+  closeItem();
+});
+
+// 🔙 Make the detail Back button extra reliable
+document.addEventListener('DOMContentLoaded', function () {
+  const backButton = document.querySelector('.back-btn');
+
+  if (backButton) {
+    backButton.addEventListener('click', function (event) {
+      event.preventDefault();
+      event.stopPropagation();
+      closeItem();
+    });
+  }
+});
 loadTMDBPosters();
 </script>
 
