@@ -247,6 +247,9 @@
         <div class="detail-desc" id="bigStory">Tap any show to see details! More info coming soon... 💛✨</div>
     </div>
 </div>
+<div class="detail-actions">
+    <button class="watch-btn" onclick="watchItem()">▶️ Play</button>
+</div>
 
 <footer>
   <p>© 2026 Teflix — Your entertainment, your vibe! 💛✨</p>
@@ -415,7 +418,9 @@ function closeItem() {
     history.back();
   }
 }
-
+function watchItem() {
+  alert("🎬 Play feature coming soon!");
+}
 function searchTitles() {
   const search = document.querySelector('.search-input').value.toLowerCase().trim();
   const cards = document.querySelectorAll('.card');
