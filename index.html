@@ -1,502 +1,114 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Teflix 🎬</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
-        :root { --bg: #0b0b0b; --card: #171717; --accent: #ffd100; --text: #ffffff; --muted: #999; --hover: #252525; }
-        body { background-color: var(--bg); color: var(--text); line-height: 1.6; }
-
-        header { background: #000; padding: 1rem 5%; position: sticky; top: 0; z-index: 100; border-bottom: 1px solid #2a2a2a; }
-        .nav-container { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.8rem; }
-        .logo { font-size: 1.8rem; font-weight: bold; color: var(--accent); cursor: pointer; }
-        nav a { color: var(--text); text-decoration: none; margin: 0 0.7rem; font-weight: 500; transition: color 0.2s; }
-        nav a:hover { color: var(--accent); }
-
-        .search-box { flex: 1; max-width: 450px; width: 100%; }
-        .search-input { width: 100%; padding: 0.7rem 1.2rem; border: none; border-radius: 6px; background: var(--card); color: var(--text); font-size: 1rem; border: 1px solid #333; }
-        .search-input:focus { outline: none; border-color: var(--accent); }
-
-        .hero { padding: 3rem 5%; text-align: center; background: linear-gradient(rgba(0,0,0,0.8), rgba(11,11,11,1)); }
-        .hero h1 { font-size: 2.2rem; margin-bottom: 0.5rem; }
-        .hero h1 span { color: var(--accent); }
-        .hero p { color: var(--muted); font-size: 1.1rem; }
-
-        .section-wrap { padding: 0 5%; max-width: 1400px; margin: 0 auto; }
-        .section-title { font-size: 1.4rem; margin: 2.5rem 0 1rem; padding-left: 0.7rem; border-left: 4px solid var(--accent); }
-
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 1.5rem; margin-bottom: 1rem; }
-        .card { background: var(--card); border-radius: 8px; overflow: hidden; cursor: pointer; transition: all 0.25s ease; border: 1px solid #2a2a2a; }
-        .card:hover { background: var(--hover); transform: translateY(-4px); border-color: var(--accent); }
-.card-thumb {
-    height: 220px;
-    background: #111;
-    overflow: hidden;
-    position: relative;
-}
-
-.card-thumb img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-}
-        .icon-main { font-size: 4rem; color: var(--accent); }
-        .card-info { padding: 0.8rem; }
-        .card-name { font-weight: 600; font-size: 0.9rem; margin-bottom: 0.2rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .card-meta { font-size: 0.75rem; color: var(--muted); }
-
-        .az-nav { display: flex; flex-wrap: wrap; gap: 0.4rem; margin: 1rem 0 3rem; }
-        .az-btn { width: 36px; height: 36px; background: var(--card); color: var(--text); border: 1px solid #333; border-radius: 6px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
-        .az-btn:hover { background: var(--accent); color: #000; border-color: var(--accent); }
-
-        #detailOverlay { position: fixed; inset: 0; background: rgba(0,0,0,0.97); z-index: 9999; display: none; overflow-y: auto; padding: 2rem 5%; }
-        .detail-container { max-width: 650px; margin: 0 auto; background: var(--card); border-radius: 12px; padding: 2rem; border: 1px solid #2a2a2a; }
-        .back-btn { background: var(--accent); color: #000; border: none; padding: 0.6rem 1.3rem; border-radius: 6px; font-weight: bold; cursor: pointer; margin-bottom: 1.5rem; }
-
-.play-btn {
-    display: block;
-    width: 180px;
-    margin: 1.5rem auto 0;
-    padding: 0.8rem 1.5rem;
-    background: var(--accent);
-    color: #000;
-    border: none;
-    border-radius: 8px;
-    font-size: 1rem;
-    font-weight: 700;
-    cursor: pointer;
-    transition: all 0.2s ease;
-}
-
-.play-btn:hover {
-    background: #fff;
-    transform: translateY(-2px);
-}
-
-.play-btn:active {
-    transform: scale(0.97);
-}
-         .back-btn:hover { background: #fff; }
-        .detail-thumb {
-    width: 180px;
-    height: 260px;
-    margin: 0 auto 1.2rem;
-    border-radius: 8px;
-    background: linear-gradient(135deg, #2a2a2a, #1f1f1f);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-}
-
-.detail-thumb img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-    border-radius: 8px;
-}
-        .detail-icon { font-size: 5rem; color: var(--accent); }
-        .detail-title {
-    font-size: 1.5rem;
-    color: var(--accent);
-    margin-bottom: 0.5rem;
-    line-height: 1.3;
-        .detail-meta { color: var(--muted); margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px solid #2a2a2a; }
-        .detail-desc { font-size: 1rem; line-height: 1.7; color: #eee; }
-
-        footer { background: #000; text-align: center; padding: 2rem 5%; color: var(--muted); border-top: 1px solid #2a2a2a; margin-top: 2rem; }
-
-        @media (max-width: 768px) {
-            .detail-title {
-    font-size: 1.4rem;
-}
-            .grid { grid-template-columns: repeat(auto-fill, minmax(125px, 1fr)); gap: 1rem; }
-            .card-thumb { height: 180px; }
-        }
-    </style>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',sans-serif}
+:root{--bg:#0b0b0b;--card:#171717;--accent:#ffd100;--text:#fff;--muted:#999;--hover:#252525}
+html{scroll-behavior:smooth}body{background:var(--bg);color:var(--text);line-height:1.6}
+header{background:#000;padding:1rem 5%;position:sticky;top:0;z-index:100;border-bottom:1px solid #2a2a2a}
+.nav-container{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.8rem}.logo{font-size:1.8rem;font-weight:700;color:var(--accent);cursor:pointer}
+nav a{color:var(--text);text-decoration:none;margin:0 .7rem;font-weight:500}nav a:hover{color:var(--accent)}
+.search-box{flex:1;max-width:450px;width:100%}.search-input{width:100%;padding:.7rem 1.2rem;border-radius:6px;background:var(--card);color:var(--text);font-size:1rem;border:1px solid #333}.search-input:focus{outline:none;border-color:var(--accent)}
+.hero{padding:3rem 5%;text-align:center;background:linear-gradient(rgba(0,0,0,.8),rgba(11,11,11,1))}.hero h1{font-size:2.2rem;margin-bottom:.5rem}.hero h1 span{color:var(--accent)}.hero p{color:var(--muted);font-size:1.1rem}
+.section-wrap{padding:0 5%;max-width:1400px;margin:0 auto}.section-title{font-size:1.4rem;margin:2.5rem 0 1rem;padding-left:.7rem;border-left:4px solid var(--accent)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:1.5rem;margin-bottom:1rem}.card{background:var(--card);border-radius:8px;overflow:hidden;cursor:pointer;transition:.25s;border:1px solid #2a2a2a}.card:hover{background:var(--hover);transform:translateY(-4px);border-color:var(--accent)}
+.card-thumb{height:220px;background:#111;overflow:hidden;display:flex;align-items:center;justify-content:center}.card-thumb img{width:100%;height:100%;object-fit:cover;display:block}.icon-main{font-size:4rem}.card-info{padding:.8rem}.card-name{font-weight:600;font-size:.9rem;margin-bottom:.2rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.card-meta{font-size:.75rem;color:var(--muted)}
+.az-nav{display:flex;flex-wrap:wrap;gap:.4rem;margin:1rem 0 3rem}.az-btn{width:36px;height:36px;background:var(--card);color:var(--text);border:1px solid #333;border-radius:6px;font-weight:600;cursor:pointer}.az-btn:hover{background:var(--accent);color:#000;border-color:var(--accent)}
+#detailOverlay{position:fixed;inset:0;background:rgba(0,0,0,.97);z-index:9999;display:none;overflow-y:auto;padding:2rem 5%}.detail-container{max-width:650px;margin:0 auto;background:var(--card);border-radius:12px;padding:2rem;border:1px solid #2a2a2a}.back-btn{background:var(--accent);color:#000;border:0;padding:.65rem 1.3rem;border-radius:8px;font-weight:700;cursor:pointer;margin-bottom:1.5rem}.back-btn:hover{background:#fff}
+.detail-thumb{width:180px;height:260px;margin:0 auto 1.2rem;border-radius:8px;background:linear-gradient(135deg,#2a2a2a,#1f1f1f);display:flex;align-items:center;justify-content:center;overflow:hidden}.detail-thumb img{width:100%;height:100%;object-fit:cover}.detail-icon{font-size:5rem}.detail-icon img{width:100%;height:100%;object-fit:cover}.detail-title{font-size:1.8rem;color:var(--accent);margin-bottom:.5rem;line-height:1.3}.detail-meta{color:var(--muted);margin-bottom:1rem;padding-bottom:1rem;border-bottom:1px solid #2a2a2a}.detail-desc{font-size:1rem;line-height:1.8;color:#eee}.play-btn{display:block;width:180px;margin:1.5rem auto 0;padding:.8rem 1.5rem;background:var(--accent);color:#000;border:0;border-radius:8px;font-size:1rem;font-weight:700;cursor:pointer}.play-btn:hover{background:#fff;transform:translateY(-2px)}
+footer{background:#000;text-align:center;padding:2rem 5%;color:var(--muted);border-top:1px solid #2a2a2a;margin-top:2rem}
+@media(max-width:768px){.nav-container{justify-content:center}nav{width:100%;text-align:center;line-height:2}.hero h1{font-size:1.8rem}.grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem}.card-thumb{height:220px}.detail-container{padding:1.4rem}.detail-title{font-size:1.6rem}}
+</style>
 </head>
 <body>
-
-<header>
-    <div class="nav-container">
-    <span class="logo" onclick="goHome()">🎬 Teflix</span>
-        <nav>
-            <a href="#home">Home</a>
-            <a href="#newest">Newest</a>
-            <a href="#anime">Anime</a>
-            <a href="#movies">Movies</a>
-            <a href="#cartoons">Cartoons</a>
-        </nav>
-        <div class="search-box">
-<input type="text" class="search-input" placeholder="🔍 Search titles..." oninput="searchTitles()">
-        </div>
-    </div>
-</header>
-
-<section class="hero" id="home">
- <h1>Welcome to <span>Teflix</span> 🎉</h1>
-<p>🎬 Your home for anime, movies & cartoons. Enjoy the latest drops! 💛✨</p>
-</section>
-
-<div class="section-wrap">
-    <h2 class="section-title" id="newest">🔥 Newest Drops</h2>
-    <div class="grid">
-        <div class="card" onclick="showItem('arifureta','⚔️')"><div class="card-thumb"><img src="IMG_6329.webp" alt="Arifureta"></div><div class="card-info"><div class="card-name">Arifureta</div><div class="card-meta">S3 • EP 1–16</div></div></div>
-        <div class="card" onclick="showItem('fullmetal','🧪')"><div class="card-thumb"><img src="IMG_6330 .JPG" alt="Fullmetal Alchemist"></div><div class="card-info"><div class="card-name">Fullmetal Alchemist</div><div class="card-meta">Brotherhood • EP 1–64</div></div></div>
-        <div class="card" onclick="showItem('exiledknight','🛡️')"><div class="card-thumb"><span class="icon-main">🛡️</span></div><div class="card-info"><div class="card-name">Exiled Heavy Knight</div><div class="card-meta">S1 • EP 1–5</div></div></div>
-        <div class="card" onclick="showItem('10yearstand','🏰')"><div class="card-thumb"><span class="icon-main">🏰</span></div><div class="card-info"><div class="card-name">10 Year-Long Stand</div><div class="card-meta">S1 • EP 3–5</div></div></div>
-        <div class="card" onclick="showItem('elusivesamurai','🏯')"><div class="card-thumb"><span class="icon-main">🏯</span></div><div class="card-info"><div class="card-name">Elusive Samurai</div><div class="card-meta">S2 • EP 1–3</div></div></div>
-        <div class="card" onclick="showItem('slime','💧')"><div class="card-thumb"><span class="icon-main">💧</span></div><div class="card-info"><div class="card-name">Reincarnated as a Slime</div><div class="card-meta">S4 • EP 11–13</div></div></div>
-        <div class="card" onclick="showItem('supermarket','🚬')"><div class="card-thumb"><span class="icon-main">🚬</span></div><div class="card-info"><div class="card-name">Smoking Behind Supermarket</div><div class="card-meta">S1 • EP 4–7</div></div></div>
-        <div class="card" onclick="showItem('chainsmokercat','🐱')"><div class="card-thumb"><span class="icon-main">🐱</span></div><div class="card-info"><div class="card-name">Chainsmoker Cat</div><div class="card-meta">S1 • EP 3–6</div></div></div>
-        <div class="card" onclick="showItem('tombraiderking','⚱️')"><div class="card-thumb"><span class="icon-main">⚱️</span></div><div class="card-info"><div class="card-name">Tomb Raider King</div><div class="card-meta">S1 • EP 3–4</div></div></div>
-        <div class="card" onclick="showItem('thunder3','⚡')"><div class="card-thumb"><span class="icon-main">⚡</span></div><div class="card-info"><div class="card-name">Thunder 3</div><div class="card-meta">S1 • EP 4–7</div></div></div>
-        <div class="card" onclick="showItem('datingsim','🎮')"><div class="card-thumb"><span class="icon-main">🎮</span></div><div class="card-info"><div class="card-name">Trapped in a Dating Sim</div><div class="card-meta">S2 • EP 1–4</div></div></div>
-        <div class="card" onclick="showItem('bleachtybw','⚔️')"><div class="card-thumb"><span class="icon-main">⚔️</span></div><div class="card-info"><div class="card-name">Bleach: TYBW</div><div class="card-meta">S4 • EP 1–2</div></div></div>
-        <div class="card" onclick="showItem('scumofthebrave','🗡️')"><div class="card-thumb"><span class="icon-main">🗡️</span></div><div class="card-info"><div class="card-name">Scum of the Brave</div><div class="card-meta">S1 • EP 22–24</div></div></div>
-        <div class="card" onclick="showItem('yowayowa','🏫')"><div class="card-thumb"><span class="icon-main">🏫</span></div><div class="card-info"><div class="card-name">Yowayowa Sensei</div><div class="card-meta">S1–2 • 29 Ep</div></div></div>
-        <div class="card" onclick="showItem('tsubasa','⚽')"><div class="card-thumb"><span class="icon-main">⚽</span></div><div class="card-info"><div class="card-name">Captain Tsubasa</div><div class="card-meta">S1 • EP 9–11</div></div></div>
-        <div class="card" onclick="showItem('tamonsbline','🎤')"><div class="card-thumb"><span class="icon-main">🎤</span></div><div class="card-info"><div class="card-name">Tamon's B-Side</div><div class="card-meta">S1 • EP 5–7</div></div></div>
-        <div class="card" onclick="showItem('sparkstomorrow','✨')"><div class="card-thumb"><span class="icon-main">✨</span></div><div class="card-info"><div class="card-name">Sparks of Tomorrow</div><div class="card-meta">S4 • EP 9–11</div></div></div>
-        <div class="card" onclick="showItem('rezero','🔄')"><div class="card-thumb"><span class="icon-main">🔄</span></div><div class="card-info"><div class="card-name">Re:Zero</div><div class="card-meta">S1 • EP 15–16</div></div></div>
-        <div class="card" onclick="showItem('daemons','👤')"><div class="card-thumb"><span class="icon-main">👤</span></div><div class="card-info"><div class="card-name">Daemons of Shadow Realm</div><div class="card-meta">S1 • EP 1–3</div></div></div>
-        <div class="card" onclick="showItem('hanaori','🌸')"><div class="card-thumb"><span class="icon-main">🌸</span></div><div class="card-info"><div class="card-name">Hanaori-san Next Life</div><div class="card-meta">S1 • EP 1–3</div></div></div>
-    </div>
-
-    <h2 class="section-title" id="anime">📺 New Anime Arrivals</h2>
-    <div class="grid">
-        <div class="card" onclick="showItem('exiledknight','🛡️')"><div class="card-thumb"><span class="icon-main">🛡️</span></div><div class="card-info"><div class="card-name">Exiled Heavy Knight</div></div></div>
-        <div class="card" onclick="showItem('hanaori','🌸')"><div class="card-thumb"><span class="icon-main">🌸</span></div><div class="card-info"><div class="card-name">Hanaori-san Next Life</div></div></div>
-        <div class="card" onclick="showItem('10yearstand','🏰')"><div class="card-thumb"><span class="icon-main">🏰</span></div><div class="card-info"><div class="card-name">10 Year-Long Last Stand</div></div></div>
-        <div class="card" onclick="showItem('tombraiderking','⚱️')"><div class="card-thumb"><span class="icon-main">⚱️</span></div><div class="card-info"><div class="card-name">Tomb Raider King</div></div></div>
-        <div class="card" onclick="showItem('chainsmokercat','🐱')"><div class="card-thumb"><span class="icon-main">🐱</span></div><div class="card-info"><div class="card-name">Chainsmoker Cat</div></div></div>
-        <div class="card" onclick="showItem('heaven','☁️')"><div class="card-thumb"><span class="icon-main">☁️</span></div><div class="card-info"><div class="card-name">Heaven Official's Blessing</div></div></div>
-        <div class="card" onclick="showItem('kuroko','🏀')"><div class="card-thumb"><span class="icon-main">🏀</span></div><div class="card-info"><div class="card-name">Kuroko's Basketball</div></div></div>
-        <div class="card" onclick="showItem('supermarket','🚬')"><div class="card-thumb"><span class="icon-main">🚬</span></div><div class="card-info"><div class="card-name">Smoking Behind Supermarket</div></div></div>
-        <div class="card" onclick="showItem('thunder3','⚡')"><div class="card-thumb"><span class="icon-main">⚡</span></div><div class="card-info"><div class="card-name">Thunder 3</div></div></div>
-        <div class="card" onclick="showItem('sparkstomorrow','✨')"><div class="card-thumb"><span class="icon-main">✨</span></div><div class="card-info"><div class="card-name">Sparks of Tomorrow</div></div></div>
-        <div class="card" onclick="showItem('gantz','👾')"><div class="card-thumb"><span class="icon-main">👾</span></div><div class="card-info"><div class="card-name">GANTZ</div></div></div>
-        <div class="card" onclick="showItem('tamonsbline','🎤')"><div class="card-thumb"><span class="icon-main">🎤</span></div><div class="card-info"><div class="card-name">Tamon's B-Side</div></div></div>
-        <div class="card" onclick="showItem('yowayowa','🏫')"><div class="card-thumb"><span class="icon-main">🏫</span></div><div class="card-info"><div class="card-name">Yowayowa Sensei</div></div></div>
-        <div class="card" onclick="showItem('watari','💔')"><div class="card-thumb"><span class="icon-main">💔</span></div><div class="card-info"><div class="card-name">Watari-kun Collapse</div></div></div>
-        <div class="card" onclick="showItem('arifureta','⚔️')"><div class="card-thumb"><span class="icon-main">⚔️</span></div><div class="card-info"><div class="card-name">Arifureta</div></div></div>
-        <div class="card" onclick="showItem('farming','🌾')"><div class="card-thumb"><span class="icon-main">🌾</span></div><div class="card-info"><div class="card-name">Farming Life in Another World</div></div></div>
-        <div class="card" onclick="showItem('skeleton','💀')"><div class="card-thumb"><span class="icon-main">💀</span></div><div class="card-info"><div class="card-name">Skeleton Knight in Another World</div></div></div>
-        <div class="card" onclick="showItem('scumofthebrave','🗡️')"><div class="card-thumb"><span class="icon-main">🗡️</span></div><div class="card-info"><div class="card-name">Scum of the Brave</div></div></div>
-        <div class="card" onclick="showItem('witchhat','🎩')"><div class="card-thumb"><span class="icon-main">🎩</span></div><div class="card-info"><div class="card-name">Witch Hat Atelier</div></div></div>
-    </div>
-
-    <h2 class="section-title" id="movies">🎬 Latest Anime Movies</h2>
-    <div class="grid">
-        <div class="card" onclick="showItem('shinchan1','🎨')"><div class="card-thumb"><span class="icon-main">🎨</span></div><div class="card-info"><div class="card-name">Shinchan: Spicy Dancers</div></div></div>
-        <div class="card" onclick="showItem('yourname','🌠')"><div class="card-thumb"><span class="icon-main">🌠</span></div><div class="card-info"><div class="card-name">Your Name.</div></div></div>
-        <div class="card" onclick="showItem('weathering','🌦️')"><div class="card-thumb"><span class="icon-main">🌦️</span></div><div class="card-info"><div class="card-name">Weathering With You</div></div></div>
-        <div class="card" onclick="showItem('suzume','🚪')"><div class="card-thumb"><span class="icon-main">🚪</span></div><div class="card-info"><div class="card-name">Suzume</div></div></div>
-        <div class="card" onclick="showItem('doraemon','🤖')"><div class="card-thumb"><span class="icon-main">🤖</span></div><div class="card-info"><div class="card-name">Doraemon: Earth Symphony</div></div></div>
-        <div class="card" onclick="showItem('jujutsu0','🧟')"><div class="card-thumb"><span class="icon-main">🧟</span></div><div class="card-info"><div class="card-name">Jujutsu Kaisen 0</div></div></div>
-        <div class="card" onclick="showItem('reze','🔫')"><div class="card-thumb"><span class="icon-main">🔫</span></div><div class="card-info"><div class="card-name">Chainsaw Man: Reze Arc</div></div></div>
-        <div class="card" onclick="showItem('haikyuu','🏐')"><div class="card-thumb"><span class="icon-main">🏐</span></div><div class="card-info"><div class="card-name">Haikyuu!! Dumpster Battle</div></div></div>
-        <div class="card" onclick="showItem('demonslayer','🔥')"><div class="card-thumb"><span class="icon-main">🔥</span></div><div class="card-info"><div class="card-name">Demon Slayer: Infinity Castle</div></div></div>
-        <div class="card" onclick="showItem('mononoke2','👹')"><div class="card-thumb"><span class="icon-main">👹</span></div><div class="card-info"><div class="card-name">Mononoke: Ashes of Rage</div></div></div>
-        <div class="card" onclick="showItem('loststar','🌟')"><div class="card-thumb"><span class="icon-main">🌟</span></div><div class="card-info"><div class="card-name">Lost in Starlight</div></div></div>
-        <div class="card" onclick="showItem('mononoke1','👻')"><div class="card-thumb"><span class="icon-main">👻</span></div><div class="card-info"><div class="card-name">Mononoke: Phantom in Rain</div></div></div>
-        <div class="card" onclick="showItem('spywhite','🕵️‍♂️')"><div class="card-thumb"><span class="icon-main">🕵️‍♂️</span></div><div class="card-info"><div class="card-name">Spy x Family: Code White</div></div></div>
-        <div class="card" onclick="showItem('lookback','🎨')"><div class="card-thumb"><span class="icon-main">🎨</span></div><div class="card-info"><div class="card-name">Look Back</div></div></div>
-        <div class="card" onclick="showItem('dbgods','🐉')"><div class="card-thumb"><span class="icon-main">🐉</span></div><div class="card-info"><div class="card-name">Dragon Ball Z: Battle of Gods</div></div></div>
-        <div class="card" onclick="showItem('shinchan2','🎭')"><div class="card-thumb"><span class="icon-main">🎭</span></div><div class="card-info"><div class="card-name">Shinchan: Mr. Smelly's Ambition</div></div></div>
-        <div class="card" onclick="showItem('bakiken','💪')"><div class="card-thumb"><span class="icon-main">💪</span></div><div class="card-info"><div class="card-name">Baki Hanma VS Kengan</div></div></div>
-        <div class="card" onclick="showItem('pokemonh','⚡')"><div class="card-thumb"><span class="icon-main">⚡</span></div><div class="card-info"><div class="card-name">Pokémon Heroes</div></div></div>
-        <div class="card" onclick="showItem('dbshero','🦸')"><div class="card-thumb"><span class="icon-main">🦸</span></div><div class="card-info"><div class="card-name">Dragon Ball Super: Super Hero</div></div></div>
-    </div>
-
-    <h2 class="section-title" id="cartoons">🎞️ Just In: Cartoon Series</h2>
-    <div class="grid">
-        <div class="card" onclick="showItem('mightynein','⚔️')"><div class="card-thumb"><span class="icon-main">⚔️</span></div><div class="card-info"><div class="card-name">The Mighty Nein</div></div></div>
-        <div class="card" onclick="showItem('badguys','😎')"><div class="card-thumb"><span class="icon-main">😎</span></div><div class="card-info"><div class="card-name">The Bad Guys: Breaking In</div></div></div>
-        <div class="card" onclick="showItem('splinter','🕵️‍♂️')"><div class="card-thumb"><span class="icon-main">🕵️‍♂️</span></div><div class="card-info"><div class="card-name">Splinter Cell: Deathwatch</div></div></div>
-        <div class="card" onclick="showItem('murder','🤖')"><div class="card-thumb"><span class="icon-main">🤖</span></div><div class="card-info"><div class="card-name">Murder Drones</div></div></div>
-        <div class="card" onclick="showItem('devilmaycry','😈')"><div class="card-thumb"><span class="icon-main">😈</span></div><div class="card-info"><div class="card-name">Devil May Cry</div></div></div>
-        <div class="card" onclick="showItem('oddballs','🎱')"><div class="card-thumb"><span class="icon-main">🎱</span></div><div class="card-info"><div class="card-name">Oddballs</div></div></div>
-        <div class="card" onclick="showItem('wolfking','🐺')"><div class="card-thumb"><span class="icon-main">🐺</span></div><div class="card-info"><div class="card-name">Wolf King</div></div></div>
-        <div class="card" onclick="showItem('monsterwheel','🚗')"><div class="card-thumb"><span class="icon-main">🚗</span></div><div class="card-info"><div class="card-name">Mighty Monsterwheelies</div></div></div>
-        <div class="card" onclick="showItem('blueeye','⚔️')"><div class="card-thumb"><span class="icon-main">⚔️</span></div><div class="card-info"><div class="card-name">BLUE EYE SAMURAI</div></div></div>
-        <div class="card" onclick="showItem('agelvis','🎸')"><div class="card-thumb"><span class="icon-main">🎸</span></div><div class="card-info"><div class="card-name">Agent Elvis</div></div></div>
-        <div class="card" onclick="showItem('angrybirds','🐦')"><div class="card-thumb"><span class="icon-main">🐦</span></div><div class="card-info"><div class="card-name">Angry Birds: Summer Madness</div></div></div>
-        <div class="card" onclick="showItem('sonicprime','🦔')"><div class="card-thumb"><span class="icon-main">🦔</span></div><div class="card-info"><div class="card-name">Sonic Prime</div></div></div>
-        <div class="card" onclick="showItem('farzar','👽')"><div class="card-thumb"><span class="icon-main">👽</span></div><div class="card-info"><div class="card-name">Farzar</div></div></div>
-        <div class="card" onclick="showItem('tombrla','🏺')"><div class="card-thumb"><span class="icon-main">🏺</span></div><div class="card-info"><div class="card-name">Tomb Raider: Lara Croft</div></div></div>
-        <div class="card" onclick="showItem('supergiant','🤖')"><div class="card-thumb"><span class="icon-main">🤖</span></div><div class="card-info"><div class="card-name">Super Giant Robot Brothers</div></div></div>
-        <div class="card" onclick="showItem('secretlevel','🎮')"><div class="card-thumb"><span class="icon-main">🎮</span></div><div class="card-info"><div class="card-name">Secret Level</div></div></div>
-        <div class="card" onclick="showItem('scottpilgrim','🎸')"><div class="card-thumb"><span class="icon-main">🎸</span></div><div class="card-info"><div class="card-name">Scott Pilgrim Takes Off</div></div></div>
-        <div class="card" onclick="showItem('sausageparty','🌭')"><div class="card-thumb"><span class="icon-main">🌭</span></div><div class="card-info"><div class="card-name">Sausage Party: Foodtopia</div></div></div>
-        <div class="card" onclick="showItem('jurassic','🦖')"><div class="card-thumb"><span class="icon-main">🦖</span></div><div class="card-info"><div class="card-name">Jurassic World: Chaos Theory</div></div></div>
-    </div>
-
-  <h2 class="section-title">Quick A–Z Nav</h2>
-<div class="az-nav">
-    <button class="az-btn" onclick="filterLetter('all')">#</button>
-    <button class="az-btn" onclick="filterLetter('A')">A</button>
-    <button class="az-btn" onclick="filterLetter('B')">B</button>
-    <button class="az-btn" onclick="filterLetter('C')">C</button>
-    <button class="az-btn" onclick="filterLetter('D')">D</button>
-    <button class="az-btn" onclick="filterLetter('E')">E</button>
-    <button class="az-btn" onclick="filterLetter('F')">F</button>
-    <button class="az-btn" onclick="filterLetter('G')">G</button>
-    <button class="az-btn" onclick="filterLetter('H')">H</button>
-    <button class="az-btn" onclick="filterLetter('I')">I</button>
-    <button class="az-btn" onclick="filterLetter('J')">J</button>
-    <button class="az-btn" onclick="filterLetter('K')">K</button>
-    <button class="az-btn" onclick="filterLetter('L')">L</button>
-    <button class="az-btn" onclick="filterLetter('M')">M</button>
-    <button class="az-btn" onclick="filterLetter('N')">N</button>
-    <button class="az-btn" onclick="filterLetter('O')">O</button>
-    <button class="az-btn" onclick="filterLetter('P')">P</button>
-    <button class="az-btn" onclick="filterLetter('Q')">Q</button>
-    <button class="az-btn" onclick="filterLetter('R')">R</button>
-    <button class="az-btn" onclick="filterLetter('S')">S</button>
-    <button class="az-btn" onclick="filterLetter('T')">T</button>
-    <button class="az-btn" onclick="filterLetter('U')">U</button>
-    <button class="az-btn" onclick="filterLetter('V')">V</button>
-    <button class="az-btn" onclick="filterLetter('W')">W</button>
-    <button class="az-btn" onclick="filterLetter('X')">X</button>
-    <button class="az-btn" onclick="filterLetter('Y')">Y</button>
-    <button class="az-btn" onclick="filterLetter('Z')">Z</button>
-
-    </div>
-</div>
-
-<div id="detailOverlay">
-    <div class="detail-container">
-        <button class="back-btn" onclick="closeItem()">← Back</button>
-        <div class="detail-thumb"><span class="detail-icon" id="bigIcon">🎬</span></div>
-        <h2 class="detail-title" id="bigTitle">Title Here</h2>
-        <div class="detail-meta" id="bigMeta">Info • Rating • Episodes</div>
-        <div class="detail-desc" id="bigStory">Tap any show to see details! More info coming soon... 💛✨</div>
-        <button class="play-btn" onclick="watchItem()">▶ Play</button>
-</div>
-
-</div>
-
-<footer>
-  <p>© 2026 Teflix — Your entertainment, your vibe! 💛✨</p>
-    <p style="font-size: 0.9rem; margin-top: 0.5rem;">Made with love just for you 🇬🇭🥰</p>
-</footer>
-
+<header><div class="nav-container"><span class="logo" onclick="goHome()">🎬 Teflix</span><nav><a href="#home">Home</a><a href="#newest">Newest</a><a href="#anime">Anime</a><a href="#movies">Movies</a><a href="#cartoons">Cartoons</a></nav><div class="search-box"><input id="searchInput" class="search-input" type="text" placeholder="🔍 Search titles..." oninput="searchTitles()"></div></div></header>
+<section class="hero" id="home"><h1>Welcome to <span>Teflix</span> 🎉</h1><p>🎬 Your home for anime, movies & cartoons. Enjoy the latest drops! 💛✨</p></section>
+<div class="section-wrap" id="content"></div>
+<div id="detailOverlay"><div class="detail-container"><button class="back-btn" onclick="closeItem()">← Back</button><div class="detail-thumb"><span class="detail-icon" id="bigIcon">🎬</span></div><h2 class="detail-title" id="bigTitle">Title</h2><div class="detail-meta" id="bigMeta">Info</div><div class="detail-desc" id="bigStory">Description</div><button class="play-btn" onclick="watchItem()">▶ Play</button></div></div>
+<footer><p>© 2026 Teflix — Your entertainment, your vibe! 💛✨</p><p style="font-size:.9rem;margin-top:.5rem">Made with love just for you 🇬🇭🥰</p></footer>
 <script>
-const TMDB_TOKEN = "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI3OTgwNmM5NzY5MmM1MzFhNDQwMTRkYzkxYjQzZThmYiIsIm5iZiI6MTc4ODAzNzY4OS41NzYsInN1YiI6IjZhOTM0YTM5OTczODBmOGE4ZjdjNzUwNCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.wDTfaedUjIhorAxp-0kelJhwduRPsdoRK4orry4MXx4";
-const TMDB_IMAGE = "https://image.tmdb.org/t/p/w500";
-
-// 📦 Saves every poster link automatically
-const posterMap = {};
-
-async function loadTMDBPosters() {
-  if (!TMDB_TOKEN || TMDB_TOKEN.includes("PASTE_YOUR")) {
-    console.log("TMDB token has not been added yet.");
-    return;
-  }
-  const cards = document.querySelectorAll(".card");
-  for (const card of cards) {
-    const titleElement = card.querySelector(".card-name");
-    const thumb = card.querySelector(".card-thumb");
-    const key = card.getAttribute("onclick")?.match(/'([^']+)'/)?.[1];
-    if (!titleElement || !thumb) continue;
-    const title = titleElement.textContent.trim();
-    try {
-      const response = await fetch(
-        `https://api.themoviedb.org/3/search/multi?query=${encodeURIComponent(title)}&include_adult=false&language=en-US&page=1`,
-        {
-          headers: {
-            Authorization: `Bearer ${TMDB_TOKEN}`,
-            accept: "application/json"
-          }
-        }
-      );
-      if (!response.ok) continue;
-      const result = await response.json();
-      const match = result.results?.find(
-        item =>
-          (item.media_type === "movie" || item.media_type === "tv") &&
-          item.poster_path
-      );
-      if (!match) continue;
-
-// 💾 Save it for the detail page!
-if (key) {
-    posterMap[key] = TMDB_IMAGE + match.poster_path;
-}
-
-      const img = document.createElement("img");
-      img.src = TMDB_IMAGE + match.poster_path;
-      img.alt = title;
-      img.loading = "lazy";
-      img.style.width = "100%";
-      img.style.height = "100%";
-      img.style.objectFit = "cover";
-      img.style.display = "block";
-      thumb.innerHTML = "";
-      thumb.appendChild(img);
-    } catch (error) {
-      console.log("TMDB poster failed:", title);
-    }
-  }
-}
-const overviewMap = {};
-const library = {
-  arifureta: {title:"Arifureta: From Commonplace to World's Strongest", meta:"Season 3 • Episodes 1–16", story:"Hajime Nagumo and his companions fight to survive and grow stronger in a dangerous world! ⚔️"},
-  fullmetal: {title:"Fullmetal Alchemist: Brotherhood", meta:"Season 1 • Episodes 19–39", story:"The Elric brothers seek the Philosopher's Stone to restore their bodies! ⚙️"},
-  exiledknight: {title:"The Exiled Heavy Knight Knows How to Game the System", meta:"Season 1 • Episodes 1–5", story:"A powerful knight exiled from his kingdom rises using his unique skills! 🛡️"},
-  '10yearstand': {title:"I Became a Legend After My 10 Year-Long Last Stand", meta:"Season 1 • Episodes 3–5", story:"After defending a post for ten years alone, he finally returns as a legend! 🏰"},
-  elusivesamurai: {title:"The Elusive Samurai", meta:"Season 2 • Episodes 1–3", story:"A brilliant but small samurai fights to restore his clan's honor! 🏯"},
-  slime: {title:"That Time I Got Reincarnated as a Slime", meta:"Season 4 • Episodes 11–13", story:"Satoru Mikami is reborn as a slime with incredible powers in a fantasy world! 💧"},
-  supermarket: {title:"Smoking Behind the Supermarket with You", meta:"Season 1 • Episodes 4–7", story:"A quiet, sweet romance unfolds between two people meeting secretly! 🚬"},
-  chainsmokercat: {title:"Chainsmoker Cat", meta:"Season 1 • Episodes 3–6", story:"A quirky, funny slice-of-life story about an unusual cat! 🐱"},
-  tombraiderking: {title:"Tomb Raider King", meta:"Season 1 • Episodes 3–4", story:"Seo Joo-heon uncovers ancient relics and battles powerful foes! ⚱️"},
-  thunder3: {title:"Thunder 3", meta:"Season 1 • Episodes 4–7", story:"Three heroes with electric powers team up to protect the world! ⚡"},
-  datingsim: {title:"Trapped in a Dating Sim", meta:"Season 2 • Episodes 1–4", story:"A tough guy gets reborn into an otome game world! 🎮"},
-  bleachtybw: {title:"Bleach: Thousand-Year Blood War", meta:"Season 4 • Episodes 1–2", story:"Ichigo Kurosaki faces his greatest enemy — the Quincy King Yhwach! ⚔️"},
-  scumofthebrave: {title:"Scum of the Brave", meta:"Season 1 • Episodes 22–24", story:"A bold story about ambition, conflict, and what it truly means to be brave! 🗡️"},
-  yowayowa: {title:"Yowayowa Sensei", meta:"Seasons 1–2 • 29 Episodes", story:"A hilarious and heartwarming school comedy! 🏫"},
-  tsubasa: {title:"Captain Tsubasa", meta:"Season 1 • Episodes 9–11", story:"The legendary soccer story that inspired millions! ⚽"},
-  tamonsbline: {title:"Tamon's B-Side", meta:"Season 1 • Episodes 5–7", story:"Behind the scenes of an idol's life — sweet and touching! 🎤"},
-  sparkstomorrow: {title:"Sparks of Tomorrow", meta:"Season 4 • Episodes 9–11", story:"Adventure, hope, and friendship in a magical world! ✨"},
-  rezero: {title:"Re:Zero - Starting Life in Another World", meta:"Season 1 • Episodes 15–16", story:"Natsuki Subaru dies and returns to save those he loves — over and over! 🔄"},
-  daemons: {title:"Daemons of the Shadow Realm", meta:"Season 1 • Episodes 1–3", story:"Dark secrets and dangerous creatures emerge from the shadows! 👤"},
-  hanaori: {title:"Hanaori-san Still Wants to Fight in the Next Life", meta:"Season 1 • Episodes 1–3", story:"A fierce girl's journey continues across lifetimes! 🌸"},
-  heaven: {title:"Heaven Official's Blessing", meta:"Anime Series", story:"A fallen god meets a mysterious loyal demon! ☁️"},
-  kuroko: {title:"Kuroko's Basketball", meta:"Anime Series", story:"The invisible player and the Generation of Miracles! 🏀"},
-  watari: {title:"Watari-kun's ****** Is About to Collapse", meta:"Anime Series", story:"A messy, funny, heartfelt romantic comedy! 💔"},
-  farming: {title:"Farming Life in Another World", meta:"Anime Series", story:"Slow life, peaceful fields, and building a village from scratch! 🌾"},
-  skeleton: {title:"Skeleton Knight in Another World", meta:"Anime Series", story:"Trapped in skeleton armor, he adventures across a new world! 💀"},
-  witchhat: {title:"Witch Hat Atelier", meta:"Anime Series", story:"Learning magic, creating art, and protecting the world! 🎩"},
-  shinchan1: {title:"Shinchan: The Spicy Kasukabe Dancers", meta:"Anime Movie", story:"Everyone's favorite mischievous kindergartner! 🎨"},
-  yourname: {title:"Your Name.", meta:"Anime Movie", story:"The timeless masterpiece about threads of fate across time! 🌠"},
-  weathering: {title:"Weathering With You", meta:"Anime Movie", story:"A boy meets a girl who can control the weather! 🌦️"},
-  suzume: {title:"Suzume", meta:"Anime Movie", story:"A girl's journey closing doors to disaster across Japan! 🚪"},
-  doraemon: {title:"Doraemon: Nobita's Earth Symphony", meta:"Anime Movie", story:"Robotic cat, gadgets, and saving the world through music! 🤖"},
-  jujutsu0: {title:"Jujutsu Kaisen 0", meta:"Anime Movie", story:"Yuta Okkotsu and Rika — the origin story! 🧟"},
-  reze: {title:"Chainsaw Man the Movie: Reze Arc", meta:"Anime Movie", story:"A deadly romance begins in the shadows! 🔫"},
-  haikyuu: {title:"HAIKYU!! The Dumpster Battle", meta:"Anime Movie", story:"Karasuno vs. Nekoma — the ultimate showdown! 🏐"},
-  demonslayer: {title:"Demon Slayer: Infinity Castle", meta:"Anime Movie", story:"The final battle inside Muzan's endless fortress! 🔥"},
-  mononoke2: {title:"Mononoke: Chapter II - The Ashes of Rage", meta:"Anime Movie", story:"The Medicine Seller faces a new supernatural mystery! 👹"},
-  loststar: {title:"Lost in Starlight", meta:"Anime Movie", story:"Two souls drifting toward each other across the cosmos! 🌟"},
-  mononoke1: {title:"Mononoke: The Phantom in the Rain", meta:"Anime Movie", story:"A terrifying spirit mystery unfolds in the downpour! 👻"},
-  spywhite: {title:"Spy x Family Movie: Code: White", meta:"Anime Movie", story:"The Forgers go on a secret family mission! 🕵️‍♂️"},
-  lookback: {title:"Look Back", meta:"Anime Movie", story:"A quiet, beautiful story about friendship and art! 🎨"},
-  dbgods: {title:"Dragon Ball Z: Battle of Gods", meta:"Anime Movie", story:"Beerus awakens — the battle of a lifetime begins! 🐉"},
-  bakiken: {title:"Baki Hanma VS Kengan Ashura", meta:"Anime Movie", story:"Two worlds of brutal martial arts collide! 💪"},
-  pokemonh: {title:"Pokémon Heroes", meta:"Anime Movie", story:"Latios and Latias protect Altomare City! ⚡"},
-  dbshero: {title:"Dragon Ball Super: Super Hero", meta:"Anime Movie", story:"The Red Ribbon Army returns — Piccolo and Gohan step up! 🦸"},
-  mightynein: {title:"The Mighty Nein", meta:"Animated Series", story:"A ragtag adventuring party full of chaos and heart! ⚔️"},
-  badguys: {title:"The Bad Guys: Breaking In", meta:"Animated Series", story:"Criminals trying to go good — with lots of trouble! 😎"},
-  splinter: {title:"Splinter Cell: Deathwatch", meta:"Animated Series", story:"Sam Fisher returns for top-secret stealth missions! 🕵️‍♂️"},
-  murder: {title:"Murder Drones", meta:"Animated Series", story:"Worker drones hunted by killer robots in a brutal world! 🤖"},
-  devilmaycry: {title:"Devil May Cry", meta:"Animated Series", story:"Dante — devil hunter extraordinaire! 😈"},
-  oddballs: {title:"Oddballs", meta:"Animated Series", story:"Weird, wild, wonderful adventures! 🎱"},
-  wolfking: {title:"Wolf King", meta:"Animated Series", story:"A fierce leader rises in a dangerous world! 🐺"},
-  monsterwheel: {title:"Mighty Monsterwheelies", meta:"Animated Series", story:"Tiny vehicles, huge adventures! 🚗"},
-  blueeye: {title:"BLUE EYE SAMURAI", meta:"Animated Series", story:"Revenge in Edo-period Japan — stunning art! ⚔️"},
-  agelvis: {title:"Agent Elvis", meta:"Animated Series", story:"The King of Rock 'n' Roll — and secret agent! 🎸"},
-  angrybirds: {title:"Angry Birds: Summer Madness", meta:"Animated Series", story:"Before they were angry — they were just crazy! 🐦"},
-  sonicprime: {title:"Sonic Prime", meta:"Animated Series", story:"Sonic across infinite dimensions! 🦔"},
-  farzar: {title:"Farzar", meta:"Animated Series", story:"Sci-fi comedy on the edge of the galaxy! 👽"},
-  tombrla: {title:"Tomb Raider: The Legend of Lara Croft", meta:"Animated Series", story:"Lara Croft returns — bold, brave, and dangerous! 🏺"},
-  supergiant: {title:"Super Giant Robot Brothers!", meta:"Animated Series", story:"Big robots, bigger drama! 🤖"},
-  secretlevel: {title:"Secret Level", meta:"Animated Series", story:"Epic worlds inspired by legendary video games! 🎮"},
-  scottpilgrim: {title:"Scott Pilgrim Takes Off", meta:"Animated Series", story:"Chase seven evil exes — in style! 🎸"},
-  sausageparty: {title:"Sausage Party: Foodtopia", meta:"Animated Series", story:"Food fights for freedom — rude and funny! 🌭"},
-  jurassic: {title:"Jurassic World: Chaos Theory", meta:"Animated Series", story:"Dinosaurs run wild — can anyone survive? 🦖"}
+const items={
+arifureta:["Arifureta: From Commonplace to World's Strongest","S3 • EP 1–16","Hajime Nagumo is transported to a dangerous fantasy world after a classroom summoning. Betrayed and left in a deadly dungeon, he must fight his way back to his friends while becoming stronger than he ever imagined. ⚔️","⚔️"],
+fullmetal:["Fullmetal Alchemist: Brotherhood","Brotherhood • EP 1–64","Edward and Alphonse Elric pay a terrible price after attempting human transmutation. They travel across Amestris searching for the Philosopher’s Stone, uncovering a conspiracy that threatens the entire country along the way. ⚙️","🧪"],
+exiledknight:["The Exiled Heavy Knight Knows How to Game the System","S1 • EP 1–5","After being cast aside as a useless knight, a determined warrior discovers a powerful way to exploit the rules of his world. His second chance turns into a journey of survival, growth and revenge. 🛡️","🛡️"],
+"10yearstand":["I Became a Legend After My 10 Year-Long Last Stand","S1 • EP 3–5","After standing alone against overwhelming enemies for ten years, a warrior finally returns from the battlefield. What was once a desperate last stand has turned him into a living legend. 🏰","🏰"],
+elusivesamurai:["The Elusive Samurai","S2 • EP 1–3","Tokiyuki Hojo is a young heir whose greatest talent is escaping danger. After his family is destroyed, he gathers allies and uses speed, strategy and courage to reclaim what was lost. 🏯","🏯"],
+slime:["That Time I Got Reincarnated as a Slime","S4 • EP 11–13","After dying in his old life, Satoru Mikami is reborn as Rimuru, a slime with extraordinary abilities. He builds a nation of monsters while facing increasingly powerful enemies and protecting the people who trust him. 💧","💧"],
+supermarket:["Smoking Behind the Supermarket with You","S1 • EP 4–7","A tired salaryman finds a small escape from his stressful days behind a supermarket. There he meets a mysterious woman, and their quiet conversations gradually grow into a warm and unexpected connection. 🚬","🚬"],
+chainsmokercat:["Chainsmoker Cat","S1 • EP 3–6","A strange and hilarious slice-of-life adventure centered on an unforgettable cat and the people caught up in its everyday chaos. 🐱","🐱"],
+tombraiderking:["Tomb Raider King","S1 • EP 3–4","Relics with supernatural powers appear around the world, and treasure hunter Seo Joo-heon knows exactly how valuable they are. Given another chance at life, he sets out to claim the relics before his enemies can. ⚱️","⚱️"],
+thunder3:["Thunder 3","S1 • EP 4–7","A group of young heroes are pulled into a strange conflict involving parallel worlds and dangerous forces. Their determination and unusual powers become the key to protecting the people they love. ⚡","⚡"],
+datingsim:["Trapped in a Dating Sim: The World of Otome Games Is Tough for Mobs","S2 • EP 1–4","Leon is reincarnated into an otome game where men are treated as little more than background characters. Armed with knowledge of the game, he decides to fight the system and make his own path. 🎮","🎮"],
+bleachtybw:["Bleach: Thousand-Year Blood War","S4 • EP 1–2","Ichigo Kurosaki and the Soul Reapers face the Quincy army in the conflict they have feared for centuries. As the truth behind their enemies is revealed, Ichigo is pushed toward his greatest battle yet. ⚔️","⚔️"],
+scumofthebrave:["Scum of the Brave","S1 • EP 22–24","A determined fighter is forced to confront ambition, betrayal and the true meaning of courage. Every victory comes with a price as enemies close in around him. 🗡️","🗡️"],
+yowayowa:["Yowayowa Sensei","S1–2 • 29 Episodes","A gentle school comedy following a soft-hearted teacher whose timid personality creates plenty of funny and heartwarming situations with her students. 🏫","🏫"],
+tsubasa:["Captain Tsubasa","S1 • EP 9–11","Young footballer Tsubasa Ozora dreams of becoming the greatest player in the world. His talent, determination and friendships drive him through fierce matches and unforgettable challenges. ⚽","⚽"],
+tamonsbline:["Tamon's B-Side","S1 • EP 5–7","A popular idol has a public image that fans adore, but his private life is much more complicated. The story explores music, friendship, romance and the person behind the stage persona. 🎤","🎤"],
+sparkstomorrow:["Sparks of Tomorrow","S4 • EP 9–11","A group of friends face a magical adventure filled with danger, hope and discoveries that test how far they are willing to go for one another. ✨","✨"],
+rezero:["Re:Zero - Starting Life in Another World","S1 • EP 15–16","Subaru Natsuki is transported to another world and discovers a terrifying ability: whenever he dies, he returns to an earlier point in time. He must use that power to protect the people he loves. 🔄","🔄"],
+daemons:["Daemons of the Shadow Realm","S1 • EP 1–3","Twins connected by a mysterious supernatural power become caught in a world of hidden creatures and dangerous secrets. Their bond becomes their greatest strength as they search for answers. 👤","👤"],
+hanaori:["Hanaori-san Still Wants to Fight in the Next Life","S1 • EP 1–3","A fierce young woman carries memories and feelings across lifetimes, refusing to give up on the battles and relationships that shaped her. 🌸","🌸"],
+heaven:["Heaven Official's Blessing","Anime Series","Xie Lian, a fallen god who has ascended to the heavens more than once, encounters the mysterious and devoted Hua Cheng. Together they uncover secrets stretching across centuries. ☁️","☁️"],
+kuroko:["Kuroko's Basketball","Anime Series","Kuroko may be almost invisible on the court, but his passing and teamwork are extraordinary. Alongside talented players, he takes on the strongest basketball teams in Japan. 🏀","🏀"],
+watari:["Watari-kun's ****** Is About to Collapse","Anime Series","Watari Naoto tries to protect the quiet life he built after a difficult childhood, but old relationships and complicated feelings begin to shake everything around him. 💔","💔"],
+farming:["Farming Life in Another World","Anime Series","After being given a second life, a former workaholic chooses a peaceful existence in another world. What begins as farming slowly grows into a lively village filled with friends and unexpected adventures. 🌾","🌾"],
+skeleton:["Skeleton Knight in Another World","Anime Series","A gamer wakes up inside a fantasy world wearing the body of his powerful skeletal avatar. Determined to use his abilities for good, he becomes an unlikely hero. 💀","💀"],
+witchhat:["Witch Hat Atelier","Anime Series","Coco dreams of becoming a witch, but magic is supposed to be a secret. After a tragic accident changes her life, she begins learning the true rules and dangers of magic. 🎩","🎩"],
+gantz:["GANTZ","Anime Series","A dangerous supernatural battle forces ordinary people into a brutal fight for survival against mysterious enemies. 👾","👾"],
+shinchan1:["Shinchan: The Spicy Kasukabe Dancers","Anime Movie","Shinnosuke and his friends get swept into another outrageous adventure, mixing comedy, family chaos and a colorful dance-filled mission. 🎨","🎨"],
+yourname:["Your Name.","Anime Movie","Two teenagers living completely different lives mysteriously begin waking up in each other’s bodies. Their search for the truth becomes a moving story about memory, fate and connection. 🌠","🌠"],
+weathering:["Weathering With You","Anime Movie","A boy meets a girl who seems able to clear the rain. Their friendship becomes a beautiful but dangerous struggle against forces beyond their control. 🌦️","🌦️"],
+suzume:["Suzume","Anime Movie","Suzume joins a mysterious young man who closes supernatural doors that cause disasters. Together they travel across Japan while confronting a painful past. 🚪","🚪"],
+doraemon:["Doraemon: Nobita's Earth Symphony","Anime Movie","Nobita and Doraemon become involved in a musical adventure that takes them far beyond their everyday lives. Friendship, music and teamwork become essential to saving the world. 🤖","🤖"],
+jujutsu0:["Jujutsu Kaisen 0","Anime Movie","Yuta Okkotsu is haunted by the spirit of his childhood friend Rika. At Jujutsu High, he learns to control his power and faces curses alongside other young sorcerers. 🧟","🧟"],
+reze:["Chainsaw Man the Movie: Reze Arc","Anime Movie","Denji meets Reze, a mysterious girl who brings excitement into his life. Their relationship takes a dangerous turn as hidden motives and deadly powers come to light. 🔫","🔫"],
+haikyuu:["HAIKYU!! The Dumpster Battle","Anime Movie","Karasuno finally faces Nekoma in the match fans have been waiting for. The two teams push themselves to the limit in a thrilling battle of skill and teamwork. 🏐","🏐"],
+demonslayer:["Demon Slayer: Infinity Castle","Anime Movie","Tanjiro and the Demon Slayer Corps are drawn into Muzan Kibutsuji’s terrifying Infinity Castle. The fight against the demons reaches its most dangerous stage yet. 🔥","🔥"],
+mononoke2:["Mononoke: Chapter II - The Ashes of Rage","Anime Movie","The mysterious Medicine Seller confronts another supernatural threat, investigating the truth behind a spirit while navigating a world filled with secrets and resentment. 👹","👹"],
+loststar:["Lost in Starlight","Anime Movie","Two people form a connection despite being separated by extraordinary circumstances. Their relationship becomes a tender journey through distance, dreams and the vastness of space. 🌟","🌟"],
+mononoke1:["Mononoke: The Phantom in the Rain","Anime Movie","A strange spirit appears amid a mysterious incident, forcing the Medicine Seller to uncover its form, truth and reason for haunting those caught in its path. 👻","👻"],
+spywhite:["Spy x Family Movie: Code: White","Anime Movie","Loid, Yor and Anya set out on a family trip that turns into a dangerous mission. The Forgers must keep their secrets while trying to prevent a major crisis. 🕵️‍♂️","🕵️‍♂️"],
+lookback:["Look Back","Anime Movie","Two young artists meet through their shared love of drawing manga. Their friendship, creativity and dreams leave a lasting mark on both of their lives. 🎨","🎨"],
+dbgods:["Dragon Ball Z: Battle of Gods","Anime Movie","The powerful God of Destruction Beerus awakens and searches for the legendary Super Saiyan God. Goku and his friends face a battle unlike anything they have seen before. 🐉","🐉"],
+shinchan2:["Shinchan: Mr. Smelly's Ambition","Anime Movie","Shinchan’s latest adventure brings his family and friends into another hilarious situation filled with bizarre plans, unexpected trouble and classic comedy. 🎭","🎭"],
+bakiken:["Baki Hanma VS Kengan Ashura","Anime Movie","Two worlds of martial arts collide as fighters from Baki Hanma and Kengan Ashura meet. Strength, technique and pride are put to the ultimate test. 💪","💪"],
+pokemonh:["Pokémon Heroes","Anime Movie","Ash and Pikachu arrive in Altomare and become involved in a mystery surrounding the legendary Pokémon Latios and Latias. ⚡","⚡"],
+dbshero:["Dragon Ball Super: Super Hero","Anime Movie","The Red Ribbon Army returns with powerful new androids. Piccolo and Gohan step forward to protect Earth in a battle that pushes their abilities to new heights. 🦸","🦸"],
+mightynein:["The Mighty Nein","Animated Series","A chaotic group of adventurers slowly becomes a family as they take on dangerous quests, personal struggles and enemies that threaten the world around them. ⚔️","⚔️"],
+badguys:["The Bad Guys: Breaking In","Animated Series","The Bad Guys try to prove they can be more than criminals, but their plans for going straight are constantly interrupted by trouble and temptation. 😎","😎"],
+splinter:["Splinter Cell: Deathwatch","Animated Series","Sam Fisher returns to the shadows for dangerous intelligence missions where stealth, patience and experience are the difference between success and disaster. 🕵️‍♂️","🕵️‍♂️"],
+murder:["Murder Drones","Animated Series","Worker drones live on a frozen planet where deadly disassembly drones hunt them. Survival becomes a strange mix of horror, mystery and dark comedy. 🤖","🤖"],
+devilmaycry:["Devil May Cry","Animated Series","Dante is a wisecracking demon hunter who takes dangerous jobs involving supernatural creatures. His latest missions pull him into a conflict much bigger than expected. 😈","😈"],
+oddballs:["Oddballs","Animated Series","James and his friends turn ordinary life into absurd adventures. Their strange ideas, wild experiments and chaotic friendship lead to nonstop comedy. 🎱","🎱"],
+wolfking:["Wolf King","Animated Series","A young leader must survive a dangerous world and discover the strength needed to protect his people while enemies close in from every side. 🐺","🐺"],
+monsterwheel:["Mighty Monsterwheelies","Animated Series","A team of tiny vehicles with huge personalities takes on monster-sized problems, using teamwork and creativity to save the day. 🚗","🚗"],
+blueeye:["BLUE EYE SAMURAI","Animated Series","In Edo-period Japan, a mixed-race swordfighter hides her identity while pursuing revenge against the men responsible for her suffering. ⚔️","⚔️"],
+agelvis:["Agent Elvis","Animated Series","Elvis Presley leads a double life as a secret agent, trading the concert stage for outrageous missions and dangerous enemies. 🎸","🎸"],
+angrybirds:["Angry Birds: Summer Madness","Animated Series","Red, Chuck, Bomb and their friends spend summer getting into ridiculous adventures filled with rivalry, friendship and bird-sized chaos. 🐦","🐦"],
+sonicprime:["Sonic Prime","Animated Series","A clash with Dr. Eggman shatters Sonic’s world, sending him across strange dimensions where he must find his friends and restore reality. 🦔","🦔"],
+farzar:["Farzar","Animated Series","Prince Fichael and his strange crew attempt to protect their city from aliens and other threats, usually making things much worse along the way. 👽","👽"],
+tombrla:["Tomb Raider: The Legend of Lara Croft","Animated Series","Lara Croft returns to action as an experienced adventurer facing ancient mysteries, dangerous enemies and secrets connected to her family. 🏺","🏺"],
+supergiant:["Super Giant Robot Brothers!","Animated Series","Two giant robot brothers and their young pilots protect Earth from enormous monsters while learning what it really means to work as a family. 🤖","🤖"],
+secretlevel:["Secret Level","Animated Series","Each episode explores a different game-inspired world, bringing legendary gaming ideas to life through action, fantasy, science fiction and adventure. 🎮","🎮"],
+scottpilgrim:["Scott Pilgrim Takes Off","Animated Series","Scott’s world gets turned upside down when his relationship with Ramona Flowers leads to a series of bizarre encounters with her seven evil exes. 🎸","🎸"],
+sausageparty:["Sausage Party: Foodtopia","Animated Series","After discovering what humans really do to food, a group of grocery-store products tries to build a society of its own. 🌭","🌭"],
+jurassic:["Jurassic World: Chaos Theory","Animated Series","A group of young survivors continues to uncover dangerous secrets while dinosaurs roam freely. Their friendship is tested as they fight to stay alive. 🦖","🦖"]
 };
-
-function goHome() { window.scrollTo({top:0, behavior:'smooth'}); }
-
-// ✅ UPDATED: Shows poster automatically — falls back to emoji if still loading!
-function showItem(key, icon) {
-  const data = library[key];
-  if (!data) return;
-
-  document.getElementById('bigTitle').textContent = data.title;
-  document.getElementById('bigMeta').textContent = data.meta;
-  document.getElementById('bigStory').textContent = overviewMap[key] || data.story;
-
-  const posterDiv = document.getElementById('bigIcon');
-  if (posterMap[key]) {
-    posterDiv.innerHTML = `<img src="${posterMap[key]}" alt="Poster">`;
-  } else {
-    posterDiv.textContent = icon;
-  }
-
- openDetailsHistory();
-document.getElementById('detailOverlay').style.display = 'block';
-document.body.style.overflow = 'hidden';
- 
-}
-
-function closeItem() {
-  const overlay = document.getElementById('detailOverlay');
-
-  if (overlay) {
-    overlay.style.display = 'none';
-  }
-
-  document.body.style.overflow = '';
-
-  // Remove the detail-page history entry if we created one
-  if (window.location.hash === '#details') {
-    history.back();
-  }
-}
-function watchItem() {
-  alert("🎬 Play feature coming soon!");
-}
-function searchTitles() {
-  const search = document.querySelector('.search-input').value.toLowerCase().trim();
-  const cards = document.querySelectorAll('.card');
-
-  cards.forEach(card => {
-    const title = card.querySelector('.card-name').textContent.toLowerCase();
-    card.style.display = title.includes(search) ? '' : 'none';
-  });
-}
-
-function filterLetter(letter) {
-  const cards = document.querySelectorAll('.card');
-  const searchInput = document.querySelector('.search-input');
-
-  searchInput.value = '';
-
-  cards.forEach(card => {
-    const title = card.querySelector('.card-name').textContent.trim();
-
-    card.style.display =
-      (letter === 'all' || title.toUpperCase().startsWith(letter))
-        ? ''
-        : 'none';
-  });
-}
-
-// 🔙 Open detail page and create a browser history entry
-function openDetailsHistory() {
-  if (window.location.hash !== '#details') {
-    history.pushState({ details: true }, '', '#details');
-  }
-}
-
-// 🔙 Browser / phone back button
-window.addEventListener('popstate', function () {
-  const overlay = document.getElementById('detailOverlay');
-
-  if (overlay && overlay.style.display === 'block') {
-    overlay.style.display = 'none';
-    document.body.style.overflow = '';
-  }
-});
-
-loadTMDBPosters();
+const sections={newest:['🔥 Newest Drops',['arifureta','fullmetal','exiledknight','10yearstand','elusivesamurai','slime','supermarket','chainsmokercat','tombraiderking','thunder3','datingsim','bleachtybw','scumofthebrave','yowayowa','tsubasa','tamonsbline','sparkstomorrow','rezero','daemons','hanaori']],anime:['📺 New Anime Arrivals',['exiledknight','hanaori','10yearstand','tombraiderking','chainsmokercat','heaven','kuroko','supermarket','thunder3','sparkstomorrow','gantz','tamonsbline','yowayowa','watari','arifureta','farming','skeleton','scumofthebrave','witchhat']],movies:['🎬 Latest Anime Movies',['shinchan1','yourname','weathering','suzume','doraemon','jujutsu0','reze','haikyuu','demonslayer','mononoke2','loststar','mononoke1','spywhite','lookback','dbgods','shinchan2','bakiken','pokemonh','dbshero']],cartoons:['🎞️ Just In: Cartoon Series',['mightynein','badguys','splinter','murder','devilmaycry','oddballs','wolfking','monsterwheel','blueeye','agelvis','angrybirds','sonicprime','farzar','tombrla','supergiant','secretlevel','scottpilgrim','sausageparty','jurassic']]};
+const posterFiles={arifureta:'IMG_6329.webp',fullmetal:'IMG_6330 .JPG'};
+function card(key){const d=items[key];return `<article class="card" data-key="${key}" onclick="showItem('${key}')"><div class="card-thumb">${posterFiles[key]?`<img src="${posterFiles[key]}" alt="${d[0]}">`:`<span class="icon-main">${d[3]}</span>`}</div><div class="card-info"><div class="card-name">${d[0]}</div><div class="card-meta">${d[1]}</div></div></article>`}
+function render(){const root=document.getElementById('content');let html='';Object.entries(sections).forEach(([id,s])=>{html+=`<h2 class="section-title" id="${id}">${s[0]}</h2><div class="grid">${s[1].map(card).join('')}</div>`});html+='<h2 class="section-title">Quick A–Z Nav</h2><div class="az-nav">';for(const x of '#ABCDEFGHIJKLMNOPQRSTUVWXYZ'){html+=`<button class="az-btn" onclick="filterLetter('${x==='#'?'all':x}')">${x}</button>`}html+='</div>';root.innerHTML=html}
+function showItem(key){const d=items[key];if(!d)return;document.getElementById('bigTitle').textContent=d[0];document.getElementById('bigMeta').textContent=d[1];document.getElementById('bigStory').textContent=d[2];const icon=document.getElementById('bigIcon');if(posterFiles[key]){icon.innerHTML=`<img src="${posterFiles[key]}" alt="${d[0]}">`}else{icon.textContent=d[3]}document.getElementById('detailOverlay').style.display='block';document.body.style.overflow='hidden';if(location.hash!=='#details')history.pushState({details:true},'', '#details')}
+function closeItem(){document.getElementById('detailOverlay').style.display='none';document.body.style.overflow='';if(location.hash==='#details')history.back()}
+function watchItem(){alert('🎬 Play feature coming soon!')}
+function goHome(){if(document.getElementById('detailOverlay').style.display==='block')closeItem();window.scrollTo({top:0,behavior:'smooth'})}
+function searchTitles(){const q=document.getElementById('searchInput').value.toLowerCase().trim();document.querySelectorAll('.card').forEach(c=>{c.style.display=c.querySelector('.card-name').textContent.toLowerCase().includes(q)?'':'none'})}
+function filterLetter(letter){document.getElementById('searchInput').value='';document.querySelectorAll('.card').forEach(c=>{const t=c.querySelector('.card-name').textContent.trim().toUpperCase();c.style.display=(letter==='all'||t.startsWith(letter))?'':'none'})}
+window.addEventListener('popstate',()=>{const o=document.getElementById('detailOverlay');if(o.style.display==='block'){o.style.display='none';document.body.style.overflow=''}});
+render();
 </script>
-
 </body>
 </html>
